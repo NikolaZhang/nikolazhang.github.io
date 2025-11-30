@@ -8,11 +8,13 @@ export default hopeTheme({
         name: "我小叮当、",
         url: "https://nikolazhang.github.io",
     },
-    iconAssets: [
-        "https://at.alicdn.com/t/c/font_4414155_jke57xnocdp.css",
-        "iconfont",
-    ],
-    iconPrefix: "iconfont icon-",
+    icon: {
+        asserts: [
+            "https://at.alicdn.com/t/c/font_4414155_jke57xnocdp.css",
+            "iconfont"
+        ],
+        prefix: "iconfont icon-",
+    },
     logo: "/head.svg",
     repo: "https://github.com/NikolaZhang/nikolazhang.github.io",
     docsDir: "docs",
@@ -20,9 +22,7 @@ export default hopeTheme({
     blog: {
         name: "我小叮当、",
         avatar: "/head.svg",
-        roundAvatar: true,
         description: "全人类的幻想乡",
-        sidebarDisplay: "none",
         timeline: "朝花夕拾",
         articlePerPage: 10,
         articleInfo: ["Date", "Category", "Tag", "ReadingTime"],
@@ -56,6 +56,11 @@ export default hopeTheme({
         blog: {
             excerpt: false
         },
+        docsearch: {
+            appId: 'YIS8DY4LNY',
+            apiKey: 'b008387bae095c0a5dc485d0a3e62b67',
+            indexName: ''
+        },
         // If you don't need comment feature, you can remove following option
         // The following config is for demo ONLY, if you need comment feature, please generate and use your own config, see comment plugin documentation for details.
         // To avoid disturbing the theme developer and consuming his resources, please DO NOT use the following config directly in your production environment!!!!!
@@ -75,106 +80,5 @@ export default hopeTheme({
             ],
 
         },
-
-        // Disable features you don't want here
-        mdEnhance: {
-            align: true,
-            attrs: true,
-            chart: true,
-            codetabs: true,
-            hint: true,
-            demo: true,
-            echarts: true,
-            flowchart: true,
-            gfm: true,
-            imgSize: true,
-            include: true,
-            katex: true,
-            mark: true,
-            mermaid: true,
-            playground: {
-                presets: ["ts", "vue"],
-            },
-            stylize: [
-                {
-                    matcher: "Recommanded",
-                    replacer: ({tag}) => {
-                        if (tag === "em")
-                            return {
-                                tag: "Badge",
-                                attrs: {type: "tip"},
-                                content: "Recommanded",
-                            };
-                    },
-                },
-            ],
-            sub: true,
-            sup: true,
-            tabs: true,
-            vPre: true,
-            vuePlayground: true,
-        },
-        pwa: {
-            favicon: "/favicon.ico",
-            cacheHTML: true,
-            cachePic: true,
-            appendBase: true,
-            apple: {
-                icon: "/assets/icon/apple-icon-152.png",
-                statusBarColor: "black",
-            },
-            msTile: {
-                image: "/assets/icon/ms-icon-144.png",
-                color: "#ffffff",
-            },
-            manifest: {
-                icons: [
-                    {
-                        src: "/assets/icon/chrome-mask-512.png",
-                        sizes: "512x512",
-                        purpose: "maskable",
-                        type: "image/png",
-                    },
-                    {
-                        src: "/assets/icon/chrome-mask-192.png",
-                        sizes: "192x192",
-                        purpose: "maskable",
-                        type: "image/png",
-                    },
-                    {
-                        src: "/assets/icon/chrome-512.png",
-                        sizes: "512x512",
-                        type: "image/png",
-                    },
-                    {
-                        src: "/assets/icon/chrome-192.png",
-                        sizes: "192x192",
-                        type: "image/png",
-                    },
-                ],
-                shortcuts: [
-                    {
-                        name: "Demo",
-                        short_name: "Demo",
-                        url: "/demo/",
-                        icons: [
-                            {
-                                src: "/assets/icon/guide-maskable.png",
-                                sizes: "192x192",
-                                purpose: "maskable",
-                                type: "image/png",
-                            },
-                            {
-                                src: "/assets/icon/guide-monochrome.png",
-                                sizes: "192x192",
-                                purpose: "monochrome",
-                                type: "image/png",
-                            },
-                        ],
-                    },
-                ],
-            },
-        },
-
     },
 });

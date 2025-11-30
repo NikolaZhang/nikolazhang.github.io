@@ -14,6 +14,6 @@ date: 2023-01-12
 - [【安卓服务器】安卓手机上使用termux](安卓手机上使用termux.md)
 - [【安卓服务器】相关服务安装-mysql](相关服务安装-mysql.md)
 - [【安卓服务器】相关服务安装](相关服务安装.md)
-- [【安卓服务器】安装Jenkins及配置](安装Jenkins及项目构建.md)
+- [【安卓服务器】安装Jenkins及配置](安装Jenkins及配置.md)
 - [【安卓服务器】Jenkins项目构建配置](Jenkins项目构建配置.md)
 - [【安卓服务器】本地webhook如何触发构建](本地webhook如何触发构建.md)
