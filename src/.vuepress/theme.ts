@@ -32,7 +32,7 @@ export default hopeTheme({
     navbar: zhNavbar,
     // sidebar
     sidebar: zhSidebar,
-    sidebarSorter: ["readme"],
+    sidebarSorter: ["readme", "filename"],
     footer: "nikola | 鲁ICP备20000559号-1",
     displayFooter: true,
     // page meta
@@ -75,12 +75,8 @@ export default hopeTheme({
             requiredMeta: ['nick'],
             reaction: true,
             emoji: [
-                '//unpkg.com/@waline/emojis@1.1.0/bilibili',
-                '//unpkg.com/@waline/emojis@1.1.0/alus',
                 '//unpkg.com/@waline/emojis@1.1.0/qq',
                 '//unpkg.com/@waline/emojis@1.1.0/tieba',
-                '//unpkg.com/@waline/emojis@1.1.0/tw-emoji',
-                '//unpkg.com/@waline/emojis@1.1.0/weibo',
             ],
         },
     },

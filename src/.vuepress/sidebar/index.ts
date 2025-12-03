@@ -7,24 +7,28 @@ export const zhSidebar = sidebar({
             icon: "article",
             prefix: "posts/",
             children: "structure",
+            collapsible: true,
         },
         {
             text: "笔记",
             icon: "footnote",
             prefix: "notes/",
             children: "structure",
+            collapsible: true,
         },
         {
             text: "开源项目",
             icon: "ability",
             prefix: "open_source/",
             children: "structure",
+            collapsible: true,
         },
         {
             text: "分享",
             icon: "share",
             prefix: "shares/",
             children: "structure",
+            collapsible: true,
         },
     ],
 });
