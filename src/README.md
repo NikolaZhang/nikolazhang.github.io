@@ -6,11 +6,12 @@ title: 我小叮当、
 heroText: 全人类的幻想乡
 tagline: ( •̀ ω •́ )✧
 heroFullScreen: true
-bgImage: /wallhaven-1ky72w.jpg
-bgImageDark: /wallhaven-zxg9lw.png
-meta:
-  - name: algolia-site-verification
-    content: F9A01040E02C3F54
+bgImage: http://dewy-blog.nikolazh.eu.org/wallhaven-1ky72w.jpg
+bgImageDark: http://dewy-blog.nikolazh.eu.org/wallhaven-zxg9lw.png
+head:
+  - - meta
+    - name: algolia-site-verification
+      content: F9A01040E02C3F54
 projects:
   - icon: project
     name: be-kami
