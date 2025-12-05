@@ -1,12 +1,16 @@
 ---
-isOriginal: true
 title: Logback日志框架配置与最佳实践
-date: 2022-10-13
 tag:
-  - logback
   - 日志
-category: 日志
+  - logback
+category: Logback
 description: 详细介绍Logback日志框架的配置方法、语法和最佳实践
+date: 2022-10-13
+
+author: nikola
+icon: article
+
+isOriginal: true
 sticky: false
 timeline: true
 article: true
@@ -215,7 +219,7 @@ Logback的XML配置文件采用自定义语法，不提供DTD或Schema规范，�
 | 属性 | 值 | 描述 |
 | --- | --- | --- |
 | scan | true/false | 是否扫描配置文件变更，默认关闭 |
-| scanPeriod | 时间值（如：milliseconds, seconds, minutes, hours） | 配置文件扫描周期，默认1分钟<br>示例：`30 seconds`、`5 minutes` |
+| scanPeriod | 时间值（如：milliseconds, seconds, minutes, hours） | 配置文件扫描周期，默认1分钟，示例：`30 seconds`、`5 minutes` |
 | packagingData | true/false | 是否在日志中包含包信息，默认关闭 |
 
 #### 说明
@@ -488,11 +492,8 @@ appender可以包含以下子标签：
 
 ### 默认类映射
 
-Logback的配置解析器（Joran）提供了默认类映射机制，允许在配置文件中省略某些组件的完整类名，简化配置。
-
-#### 工作原理
-
-Logback的`JoranConfigurator`类在`addDefaultNestedComponentRegistryRules`方法中定义了一系列默认映射规则，将父组件和子组件名称映射到对应的实现类。
+- Logback的配置解析器（Joran）提供了默认类映射机制，允许在配置文件中省略某些组件的完整类名，简化配置。
+- Logback的`JoranConfigurator`类在`addDefaultNestedComponentRegistryRules`方法中定义了一系列默认映射规则，将父组件和子组件名称映射到对应的实现类。
 
 #### 常用默认映射示例
 
@@ -695,7 +696,7 @@ Logback支持通过`include`标签从其他文件引入部分配置，实现配�
 </included>
 ```
 
-#### 应用场景
+**应用场景**：
 
 - 抽取通用配置（如标准appender、第三方框架日志配置）
 - 区分环境配置（开发、测试、生产）
@@ -773,9 +774,3 @@ Logback是一个功能强大且灵活的日志框架，通过合理配置可以�
 - 需要对日志事件进行精确排序
 - 实现日志事件的唯一标识
 - 便于日志分析和关联
-
-### 总结
-
-本文详细介绍了Logback日志框架的配置与使用，从基本概念到高级特性都进行了全面的讲解。通过合理配置Logback，可以满足各种复杂的日志需求，提高应用程序的可维护性和可观察性。
-
-在实际开发中，建议根据项目规模和需求选择合适的日志配置策略，并结合最佳实践进行配置，以确保日志系统的高效运行和良好的用户体验。

@@ -8,7 +8,6 @@ tag:
   - 配置
 category: 日志
 description: 详细介绍Logback日志框架的属性配置方法、语法和最佳实践
-description: 详细介绍Logback日志框架的属性配置方法、语法和最佳实践
 sticky: false
 timeline: true
 article: true
