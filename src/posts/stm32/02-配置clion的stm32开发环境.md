@@ -101,7 +101,6 @@ adapter speed 10000
 
 运行项目，效果如下：
 
-
 ![VID_20240313_232355 -small-original](https://raw.githubusercontent.com/NikolaZhang/image-blog/main/2-stm32-dev-env/VID_20240313_232355%20-small-original.gif)
 
 ## 参考

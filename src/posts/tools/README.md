@@ -7,4 +7,4 @@ category:
 date: 2023-01-12
 ---
 
-- [通过nps访问内网pc](nps内网穿透.md)
+- [通过nps访问内网pc](01-nps内网穿透.md)

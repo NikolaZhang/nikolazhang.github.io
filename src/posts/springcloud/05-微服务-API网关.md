@@ -1,13 +1,12 @@
 ---
 isOriginal: true
-title: zuul security jdbc鉴权
-
+title: 微服务-API网关
 
 
 tag:
   - springboot
 category: 技术
-description: 在网关层整合security进行基于jdbc的鉴权实现
+description: Spring Cloud Gateway网关与security基于jdbc的鉴权实现
 date: 2020-03-03
 sticky: false
 timeline: true
@@ -15,7 +14,7 @@ article: true
 star: false
 ---
 
-> 稍微介绍一下如何使用zuul和security在网关层实现基于jdbc的鉴权
+> 稍微介绍一下如何使用Spring Cloud Gateway和security在网关层实现基于jdbc的鉴权
 
 ## 背景
 
@@ -166,9 +165,8 @@ INSERT INTO `communicate_db`.`role_permission` VALUES (6, 1, 1, '2020-03-02 17:5
 
 因为有个大计划, 所以这里我对模块可能分的有些细粒度. 由于是刚开始所以还算是清晰明了.
 
-1. zookeeper注册中心, 这是微服务必不可少的. 当然了你也可以使用eureka. 其实个人更喜欢后者. 但是听到eureka不再开源之后. 立刻就换了zookeeper.
-2. 网关模块, 这里我使用的还是zuul, 为什么没使用gateway呢? 因为我先写的security鉴权部分, 之后添加gateway发现不能兼容.
-为了写这个文章, 我就暂时用了zuul, 以后肯定是会升级的. 同时鉴权实现也会发生变化. 这样就可以有两篇文章了.
+1. zookeeper注册中心, 这是微服务必不可少的. 当然了你也可以使用eureka或nacos. 
+2. 网关模块, 这里使用的是Spring Cloud Gateway, 这是Spring Cloud官方推荐的网关解决方案, 替代了Netflix Zuul.
 3. 服务模块, 就是单纯的spring mvc而已.
 4. 另外通过feign调用相应模块中的资源, 因为在网关鉴权的时候, 有些资源是要从服务模块中获取的.
 
@@ -228,33 +226,46 @@ public class AuthorizeController {
 
 ## 网关
 
-搭建一个zuul, 需要以下步骤:
+搭建一个Spring Cloud Gateway, 需要以下步骤:
 
 1. 添加依赖
 
 ```xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+    <artifactId>spring-cloud-starter-gateway</artifactId>
+</dependency>
+<!-- 如果使用服务发现, 需要添加服务发现客户端依赖 -->
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
 </dependency>
 ```
 
 这里顺便提及一下我们使用的springboot版本是2.2.4.RELEASE, 对应的springcloud版本是Hoxton.SR1.
 这个很重要, 不然项目出什么问题, 你可能得费很大劲去找到合适的版本.
 毕竟不想把所有代码都粘出来, 文末我会附上gitee仓库地址. 要坚持到最后啊!
-2. 启动类添加`@EnableZuulProxy`注解, 这个用于开启zuul的路由转发功能.
+2. 启动类无需额外注解, Spring Cloud Gateway会自动配置.
 3. 配置路由转发
 
 ```yml
-zuul:
-  sensitive-headers: "*"
-  routes:
-    syscore:
-      path: /user/**
-      stripPrefix: false
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: syscore
+          uri: lb://syscore
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=0
 ```
 
-总之根据自己的实际情况配置就就好. 这里的配置的意思是, 以/user开头的所有请求都会转发到syscore这个服务模块(上文已经提及的)上去. stripPrefix=false即不去除/user.
+总之根据自己的实际情况配置就就好. 这里的配置的意思是, 以/user开头的所有请求都会转发到syscore这个服务模块(上文已经提及的)上去. StripPrefix=0即不去除/user.
 
 以上一个小小的网关就搭建好了.
 
@@ -269,66 +280,132 @@ zuul:
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
+<!-- Spring Cloud Gateway需要使用响应式Security -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-webflux</artifactId>
+</dependency>
 ```
 
 这样我们的应用在启动之后会默认生成一个账号user, 密码会打印在日志中. 当你访问资源时, 会让你进行登录. 当然这不是我们想要的. 为了实现上面说的效果我们要自定义security的一些配置.
 2. 配置security
-这里需要继承`WebSecurityConfigurerAdapter`并重写你需要的方法
+Spring Cloud Gateway是响应式的，需要使用`SecurityWebFilterChain`来配置安全策略
 
 ```java
-@Override
-protected void configure(HttpSecurity http) throws Exception {
-    http.formLogin()
+@Configuration
+@EnableWebFluxSecurity
+public class SecurityConfig {
+
+    private final UserDetailsRepositoryReactiveAuthenticationManager authenticationManager;
+    private final ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer;
+
+    @Autowired
+    public SecurityConfig(ReactiveUserDetailsService userDetailsService, 
+                         PasswordEncoder passwordEncoder, 
+                         ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer) {
+        this.authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        this.authenticationManager.setPasswordEncoder(passwordEncoder);
+        this.authorizeExchangeCustomizer = authorizeExchangeCustomizer;
+    }
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http
+            .formLogin()
             .and()
-            .authorizeRequests()
-            .anyRequest().authenticated().withObjectPostProcessor(new MineObjectPostProcessor());
-}
-private class MineObjectPostProcessor implements ObjectPostProcessor<FilterSecurityInterceptor> {
-    @Override
-    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-        // 1. 访问一个url的时候返回这个url资源对应的权限
-        o.setSecurityMetadataSource(mineFilterInvocationSecurityMetadataSource);
-        // 2. 判断用户是否具有访问url资源的权限 具有权限直接返回 不具有抛出401异常
-        o.setAccessDecisionManager(mineAccessDecisionManager);
-        return o;
+            .authorizeExchange(authorizeExchangeCustomizer)
+            .authenticationManager(authenticationManager)
+            .csrf().disable(); // 生产环境请根据实际情况配置CSRF保护
+        return http.build();
     }
 }
 ```
 
-`configure(HttpSecurity http)`是配置的重点, 这里我们配置登录方式为表单方式(security提供的登录界面), 并对所有请求进行校验, 校验时使用我们自定义的`SecurityMetadataSource`和`AccessDecisionManager`. 前者用于放置资源对应的权限信息. 后者用于判断用户是否具有资源的权限.
-当然, 提到用户就要有一个方法去获取用户的信息:
+3. 自定义权限检查组件
 
 ```java
-@Override
-protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // 获取jdbc中的用户权限信息, 并指定密码校验方式
-    auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
+@Component
+public class CustomAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+
+    private final UserClient userClient;
+
+    @Autowired
+    public CustomAuthorizationManager(UserClient userClient) {
+        this.userClient = userClient;
+    }
+
+    @Override
+    public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext authorizationContext) {
+        ServerWebExchange exchange = authorizationContext.getExchange();
+        ServerHttpRequest request = exchange.getRequest();
+        String path = request.getURI().getPath();
+        String method = request.getMethodValue();
+
+        return authenticationMono
+            .flatMap(authentication -> {
+                if (authentication.isAuthenticated()) {
+                    // 获取用户权限
+                    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+                    List<String> userRoles = authorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList());
+
+                    // 检查用户是否有顶级权限
+                    if (userRoles.contains(PermissionRoleConstant.ROLE_NIKOLA)) {
+                        return Mono.just(new AuthorizationDecision(true));
+                    }
+
+                    // 获取所有权限配置
+                    return userClient.listPermissionRoles()
+                        .flatMapIterable(Function.identity())
+                        .filter(permissionRole -> {
+                            // 匹配路径和方法
+                            AntPathMatcher pathMatcher = new AntPathMatcher();
+                            return pathMatcher.match(permissionRole.getUrl(), path) && 
+                                   permissionRole.getMethod().equals(method);
+                        })
+                        .map(PermissionRoleDO::getRoleCode)
+                        .collectList()
+                        .flatMap(requiredRoles -> {
+                            // 如果没有配置该资源的权限，需要顶级权限
+                            if (requiredRoles.isEmpty()) {
+                                return Mono.just(new AuthorizationDecision(false));
+                            }
+                            // 检查用户是否有至少一个所需权限
+                            boolean hasPermission = requiredRoles.stream()
+                                .anyMatch(userRoles::contains);
+                            return Mono.just(new AuthorizationDecision(hasPermission));
+                        });
+                }
+                return Mono.just(new AuthorizationDecision(false));
+            });
+    }
 }
 ```
 
-3. 当然你可以配置一些可以完全忽略校验的请求
+4. 配置权限检查器
 
 ```java
-@Override
-public void configure(WebSecurity web) throws Exception {
-    web.ignoring().mvcMatchers("/favicon.ico");
-}
-```
+@Configuration
+public class AuthorizationConfig {
 
-4. 可以看到我们的程序依赖了以下对象. 这些都是自定义的因此要注入进来
+    private final CustomAuthorizationManager customAuthorizationManager;
 
-```java
-private final UserDetailServiceImpl userDetailService;
-private final PasswordEncoder passwordEncoder;
-private final MineFilterInvocationSecurityMetadataSource mineFilterInvocationSecurityMetadataSource;
-private final MineAccessDecisionManager mineAccessDecisionManager;
+    @Autowired
+    public AuthorizationConfig(CustomAuthorizationManager customAuthorizationManager) {
+        this.customAuthorizationManager = customAuthorizationManager;
+    }
 
-@Autowired
-public WebSecurityConfig(PasswordEncoder passwordEncoder, UserDetailServiceImpl userDetailService, MineFilterInvocationSecurityMetadataSource mineFilterInvocationSecurityMetadataSource, MineAccessDecisionManager mineAccessDecisionManager) {
-    this.passwordEncoder = passwordEncoder;
-    this.userDetailService = userDetailService;
-    this.mineFilterInvocationSecurityMetadataSource = mineFilterInvocationSecurityMetadataSource;
-    this.mineAccessDecisionManager = mineAccessDecisionManager;
+    @Bean
+    public ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer() {
+        return exchanges -> exchanges
+            .pathMatchers("/favicon.ico").permitAll() // 忽略静态资源
+            .anyExchange().access(customAuthorizationManager);
+    }
 }
 ```
 
@@ -346,43 +423,48 @@ public PasswordEncoder passwordEncoder() {
 
 ```
 
-### userDetailService
+### Reactive userDetailService
 
-用于存放登录用户的一些信息, 主要是用户名, 密码, 权限.
+用于存放登录用户的一些信息, 主要是用户名, 密码, 权限. Spring Cloud Gateway需要使用响应式的`ReactiveUserDetailsService`.
 
 ```java
 @Slf4j
 @Component
-public class UserDetailServiceImpl implements UserDetailsService {
+public class ReactiveUserDetailServiceImpl implements ReactiveUserDetailsService {
 
     private final UserClient userClient;
 
-    public UserDetailServiceImpl(UserClient userClient) {
+    public ReactiveUserDetailServiceImpl(UserClient userClient) {
         this.userClient = userClient;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("[UserDetailServiceImpl] ====> 获取用户信息");
+    public Mono<UserDetails> findByUsername(String username) {
+        log.debug("[ReactiveUserDetailServiceImpl] ====> 获取用户信息");
         // 1. 获取jdbc中的用户信息 主要是用户的密码和角色
-        UserDO userDo = userClient.findUserByName(username);
-        if (Objects.isNull(userDo)) {
-            throw new BusinessException("只有注册之后才可以进行登录哦XD", HttpStatus.UNAUTHORIZED);
-        }
-        List<RoleDO> roleDos = userClient.findUserAuthority(userDo.getUserId());
+        return Mono.fromCallable(() -> userClient.findUserByName(username))
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMap(userDo -> {
+                    if (Objects.isNull(userDo)) {
+                        return Mono.error(new BusinessException("只有注册之后才可以进行登录哦XD", HttpStatus.UNAUTHORIZED));
+                    }
+                    return Mono.fromCallable(() -> userClient.findUserAuthority(userDo.getUserId()))
+                            .subscribeOn(Schedulers.boundedElastic())
+                            .map(roleDos -> {
+                                // 2. 设置用户所具有的权限
+                                List<GrantedAuthority> authorities = new ArrayList<>(4);
+                                log.debug("[ReactiveUserDetailServiceImpl] ====> 当前用户{}"的权限为: {}", 
+                                        userDo.getUserId(), JSON.toJSONString(roleDos));
+                                for (RoleDO roleDo : roleDos) {
+                                    if (StringUtils.isNotEmpty(roleDo.getRoleCode())) {
+                                        authorities.add(new SimpleGrantedAuthority(roleDo.getRoleCode()));
+                                    }
+                                }
 
-        // 2. 设置用户所具有的权限
-        List<GrantedAuthority> authorities = new ArrayList<>(4);
-        log.debug("[UserDetailServiceImpl] ====> 当前用户{}的权限为: {}", userDo.getUserId(), JSON.toJSONString(roleDos));
-        for (RoleDO roleDo : roleDos) {
-            if (StringUtils.isNotEmpty(roleDo.getRoleCode())) {
-                authorities.add(new SimpleGrantedAuthority(roleDo.getRoleCode()));
-            }
-        }
-
-        // 3. 返回UserDetails (通过用户名, 密码及权限生成对象)
-        UserDetails userDetails = new User(username, userDo.getPassword(), authorities);
-        return userDetails;
+                                // 3. 返回UserDetails (通过用户名, 密码及权限生成对象)
+                                return (UserDetails) new User(username, userDo.getPassword(), authorities);
+                            });
+                });
     }
 }
 
@@ -390,44 +472,21 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 `GrantedAuthority` 是用来存放用户的权限信息的. `SimpleGrantedAuthority`是他的一个实现, 用于存放用户权限(角色)字符串. 当获取时可以调用`getAuthority()`.
 
-### MineFilterInvocationSecurityMetadataSource
+### CustomAuthorizationManager
 
-这个类是`FilterInvocationSecurityMetadataSource`的实现. 我们重写`getAttributes`, 去获取当前请求在数据库中配置的访问权限信息, 具体实现方法见下:
+在响应式Security中，我们不再使用`FilterInvocationSecurityMetadataSource`和`AccessDecisionManager`，而是使用`ReactiveAuthorizationManager`来统一处理权限检查逻辑。
 
-```java
-@Override
-public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-    log.debug("[FilterInvocationSecurityMetadataSource] ====> 获取请求需要的权限信息");
-    // 1. 获取当前请求信息
-    FilterInvocation filterInvocation = (FilterInvocation) object;
-    HttpServletRequest httpServletRequest = filterInvocation.getHttpRequest();
-    log.debug("[FilterInvocationSecurityMetadataSource] ====> 当前请求为: {}", httpServletRequest.getRequestURI());
-    // 2. 根据角色权限表对当前请求进行匹配, 匹配成功则取出当前请求的访问权限
-    List<ConfigAttribute> configAttributes = new ArrayList<>(4);
-    List<PermissionRoleDO> permissionRoles = userClient.listPermissionRoles();
-    permissionRoles.stream()
-            .filter(act ->
-                    // 根据请求路径和请求方法筛选出匹配当前请求的数据集
-                    new AntPathRequestMatcher(act.getUrl(), act.getMethod()).matches(httpServletRequest)
-            )
-            .forEach(act ->
-                    configAttributes.add(() -> act.getRoleCode())
-            );
+在前面的配置中，我们已经定义了`CustomAuthorizationManager`，它负责：
+1. 获取当前请求的路径和方法
+2. 获取用户的权限信息
+3. 检查用户是否有顶级权限
+4. 获取数据库中配置的资源权限
+5. 匹配请求路径和方法对应的权限
+6. 判断用户是否有访问权限
 
-    // 3. 如果当前请求不在请求列表中或者所有匹配均失败, 则使用默认权限
-    if (CollectionUtils.isEmpty(configAttributes)) {
-        // 返回一个默认权限
-        return SecurityConfig.createList(PermissionRoleConstant.ROLE_NIKOLA);
-    } else {
-        // 返回匹配的结果
-        return configAttributes;
-    }
-}
-```
+### PermissionRoleConstant
 
-`List<PermissionRoleDO> permissionRoles = userClient.listPermissionRoles();` 这个我直接获取了数据库中所有的配置, 之后通过`new AntPathRequestMatcher(act.getUrl(), act.getMethod()).matches(httpServletRequest)`和当前请求进行过滤匹配. 将符合的结果添加到`configAttributes`中.
-
-最后, 如果当前请求没有匹配成功. 我们就对当前请求给与一个默认的权限. `PermissionRoleConstant.ROLE_NIKOLA`. PermissionRoleConstant是 我的一个常量类.
+常量类保持不变：
 
 ```java
 public final class PermissionRoleConstant {
@@ -441,39 +500,7 @@ public final class PermissionRoleConstant {
 
 ```
 
-### MineAccessDecisionManager
-
-这个类实现自`AccessDecisionManager`用于判断用户是否可以访问当前资源. 上面的两步准备都是为了这一步. 这里我们直接重写`decide`方法
-
-```java
-@Override
-public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-    log.debug("[AccessDecisionManager] ====> 判断用户是否有权访问");
-    // 1. 获取当前用户的访问权限
-    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-    // 2. 获取该资源访问需要的权限, 目前系统定义角色数较少
-    List<String> roles = new ArrayList<>(8);
-    configAttributes.forEach(act -> roles.add(act.getAttribute()));
-    log.debug("[AccessDecisionManager] ====> 所有的权限: {}", JSON.toJSONString(roles));
-
-    // 3. 判断用户是否有访问接口权限, 有的话直接返回
-    for (GrantedAuthority authority : authorities) {
-        log.debug("[AccessDecisionManager] ====> 用户当前权限: {}", authority);
-        // 如果当前用户为顶级 直接允许访问 || 请求需要的权限中包含用户当前的权限 允许访问
-        if (authority.getAuthority().equalsIgnoreCase(PermissionRoleConstant.ROLE_NIKOLA) ||
-                roles.contains(authority.getAuthority())) {
-            log.debug("[AccessDecisionManager] ====> 用户可以访问");
-            return;
-        }
-    }
-
-    // 4. 没有接口访问权限直接拒绝访问
-    throw new AccessDeniedException("没有访问权限！");
-}
-```
-
-我们的权限控制就一句`authority.getAuthority().equalsIgnoreCase(PermissionRoleConstant.ROLE_NIKOLA) || roles.contains(authority.getAuthority())` 如果用户的权限为ROLE_NIKOLA或者资源的访问权限中包含了用户当前的权限则允许访问. 没有匹配的结果则直接抛出异常, 拒绝访问.
+我们的权限控制逻辑是：如果用户的权限为ROLE_NIKOLA或者资源的访问权限中包含了用户当前的权限则允许访问。没有匹配的结果则直接拒绝访问。
 
 因此如果你是顶级用户那么, 你是可以访问所有资源的. 不是的话只能访问配置相应权限的资源.
 
