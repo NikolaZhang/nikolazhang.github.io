@@ -7,6 +7,6 @@ category:
 date: 2023-01-12
 ---
 
-- [go web编程](web编程.md)
-- [golang 接口](接口.md)
-- [golang 结构体](结构体.md)
+- [golang 接口](01-接口.md)
+- [golang 结构体](02-结构体.md)
+- [go web编程](03-web编程.md)
