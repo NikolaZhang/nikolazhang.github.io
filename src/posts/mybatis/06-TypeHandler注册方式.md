@@ -71,7 +71,7 @@ private void typeHandlerElement(XNode parent) {
                 String jdbcTypeName = child.getStringAttribute("jdbcType");
                 String handlerTypeName = child.getStringAttribute("handler");
                 Class<?> javaTypeClass = resolveClass(javaTypeName);
-                JdbcType jdbcType = `resolveJdbcType`(jdbcTypeName);
+                JdbcType jdbcType = resolveJdbcType(jdbcTypeName);
                 Class<?> typeHandlerClass = resolveClass(handlerTypeName);
                 if (javaTypeClass != null) {
                 if (jdbcType == null) {

@@ -18,7 +18,7 @@ star: false
 ---
 
 
-> 之前谈到[配置文件解析的mappers节点](/category/mybatis/配置文件解析.html#mappers节点)时, 说到两种解析方式即:  
+> 之前谈到[配置文件解析的mappers节点](./01-配置文件解析.md#mappers节点)时, 说到两种解析方式即:  
 > `MapperAnnotationBuilder`用于解析`package`配置方式指定的接口类  
 > `XMLMapperBuilder`用于解析`mapper`配置方式指定的xml
 > 本文详细介绍这两种方式的解析方法
