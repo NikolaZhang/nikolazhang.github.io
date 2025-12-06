@@ -175,7 +175,7 @@ public class SmilePropertyDefiner extends PropertyDefinerBase {
 
 **输出效果**：
 
-```plaintxt
+```plaintext
 ^_^/ 2022-10-19 15:07:51.476 INFO  [main] c.n.l.TestLogBack - here is info
 ^_^/ 2022-10-19 15:07:51.478 DEBUG [main] c.n.l.model.Foo - Did it again!
 ^_^/ 2022-10-19 15:07:51.478 INFO  [main] c.n.l.TestLogBack - Exiting application.

@@ -22,6 +22,7 @@ star: false
 <!--more-->
 
 ### 1.1 数据类型
+
 | 类型分类 | 数据类型 | 大小             | 使用说明                                                                                |
 | :------- | :------- | :--------------- | :-------------------------------------------------------------------------------------- |
 | 整数类型 | tinyint  | 1字节            | 无符号整数，范围：0 到 255                                                              |
@@ -40,6 +41,7 @@ star: false
 |          | datetime | 8字节            | 存储日期和时间，范围：1753年1月1日00:00:00.000 到 9999年12月31日23:59:59.997，精确到3.33毫秒 |
 
 > **注意事项：**
+
 1. 查看数据实际占用字节数可以使用 `DATALENGTH(expression)` 函数
 2. 在非Unicode字符类型中，一个汉字通常占2字节（取决于字符集）；在Unicode类型中，一个汉字占2字节
 3. SQL Server 2005及以上版本支持 `varchar(max)` 和 `nvarchar(max)`，最大可存储2GB数据
@@ -47,7 +49,9 @@ star: false
 [【SqlServer】Sql Server 支持的数据类型](https://www.cnblogs.com/HDK2016/p/7782303.html "参考链接")
 
 ## 1.2 常用函数
+
 ### 1.2.1 数据类型转换函数
+
 | 函数名                       | 作用                 | 示例                                    |
 | :--------------------------- | :------------------- | :-------------------------------------- |
 | CONVERT(type, val)           | 将val转换为type类型  | CONVERT(date, '2018-12-30')             |
@@ -56,6 +60,7 @@ star: false
 | FORMAT(val, fmt)             | 格式化数据为指定样式 | FORMAT(GETDATE(), 'yyyy/MM/dd')         |
 
 ### 1.2.2 字符串操作函数
+
 | 函数名                  | 作用                                                       | 示例                                |
 | :---------------------- | :--------------------------------------------------------- | :---------------------------------- |
 | LTRIM(val)              | 去除字符串左侧空格                                         | LTRIM('     abcde')                 |
@@ -71,12 +76,14 @@ star: false
 | SUBSTRING(src, start, len) | 截取字符串指定部分                                    | SUBSTRING('abcdef', 1, 2)           |
 
 > **注意事项：**
+
 1. SQL Server 2017及以上版本已支持 `TRIM()` 函数，可直接去除字符串两端空格
 2. `CHARINDEX()` 默认不区分大小写，如需区分可使用 `COLLATE Latin1_General_CS_AS`
 3. `PATINDEX()` 必须使用通配符，如 `'%pattern%'`；如果不使用通配符，则需完全匹配
 4. 所有函数调用均需使用 `SELECT 函数名(参数)` 形式
 
 ### 1.2.3 日期时间函数
+
 | 函数名                   | 作用                                                   | 示例                                    |
 | :----------------------- | :----------------------------------------------------- | :-------------------------------------- |
 | GETDATE()                | 获取当前系统日期和时间                                 | GETDATE()                               |
@@ -86,6 +93,7 @@ star: false
 | DATEPART(part, date)     | 返回日期指定部分的整数表示                             | DATEPART(MONTH, '2018-12-30')           |
 
 ### 1.2.4 数学函数
+
 | 函数名         | 作用                      | 示例              |
 | :------------- | :------------------------ | :---------------- |
 | CEILING(val)   | 向上取整                  | CEILING(1.2)      |
@@ -96,9 +104,11 @@ star: false
 | SQRT(val)      | 计算平方根                | SQRT(16)          |
 
 ## 1.3 数据库操作
+
 ### 1.3.1 基本数据库操作
 
 #### 1.3.1.1 创建数据库
+
 ```sql
 CREATE DATABASE db_name
 ON PRIMARY
@@ -120,12 +130,14 @@ LOG ON
 ```
 
 #### 1.3.1.2 删除数据库
+
 ```sql
 USE master;
 DROP DATABASE IF EXISTS db_name;
 ```
 
 #### 1.3.1.3 备份数据库
+
 ```sql
 -- 完整备份
 BACKUP DATABASE db_name TO DISK = 'F:\\test.bak';
@@ -138,6 +150,7 @@ BACKUP LOG db_name TO DISK = 'F:\\test_log.bak';
 ```
 
 #### 1.3.1.4 还原数据库
+
 ```sql
 -- 确保数据库未被使用
 USE master;
@@ -152,7 +165,9 @@ RESTORE LOG db_name FROM DISK = 'F:\\test_log.bak' WITH RECOVERY;
 ```
 
 ### 1.3.2 表的基本操作
+
 #### 1.3.2.1 创建表
+
 ```sql
 USE db_name;
 GO
@@ -168,12 +183,14 @@ GO
 ```
 
 #### 1.3.2.2 删除表
+
 ```sql
 USE db_name;
 DROP TABLE IF EXISTS tb_name;
 ```
 
 #### 1.3.2.3 修改表
+
 ```sql
 -- 添加列
 ALTER TABLE tb_name ADD col_name VARCHAR(10);
@@ -194,6 +211,7 @@ ALTER TABLE tb_name DROP CONSTRAINT UK_col_name;
 ```
 
 #### 1.3.2.4 主键与外键
+
 ```sql
 -- 创建表时定义主键
 CREATE TABLE tb_name1
@@ -212,6 +230,7 @@ CREATE TABLE tb_name2
 ```
 
 #### 1.3.2.5 插入数据
+
 ```sql
 -- 单条数据插入
 INSERT INTO tb_name (name, email) VALUES ('张三', 'zhangsan@example.com');
@@ -228,11 +247,13 @@ GO
 ```
 
 #### 1.3.2.6 更新数据
+
 ```sql
 UPDATE tb_name SET name = '测试', email = 'test@example.com' WHERE id = 1;
 ```
 
 #### 1.3.2.7 删除数据
+
 ```sql
 -- 删除表中所有数据但不释放空间
 DELETE FROM tb_name;
@@ -245,6 +266,7 @@ DELETE FROM tb_name WHERE id = 5;
 ```
 
 #### 1.3.2.8 查看表结构
+
 ```sql
 -- 方法1
 SP_HELP tb_name;
@@ -254,7 +276,9 @@ SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tb_name';
 ```
 
 ### 1.3.3 索引操作
+
 #### 1.3.3.1 创建索引
+
 ```sql
 -- 创建非聚集索引
 CREATE INDEX IX_tb_name_col_name ON tb_name(col_name);
@@ -267,24 +291,30 @@ CREATE INDEX IX_tb_name_col1_col2 ON tb_name(col1, col2);
 ```
 
 #### 1.3.3.2 删除索引
+
 ```sql
 DROP INDEX IX_tb_name_col_name ON tb_name;
 ```
 
 ### 1.3.4 视图操作
+
 #### 1.3.4.1 创建视图
+
 ```sql
 CREATE VIEW view_name AS
 SELECT id, name, email FROM tb_name WHERE status = 1;
 ```
 
 #### 1.3.4.2 删除视图
+
 ```sql
 DROP VIEW IF EXISTS view_name;
 ```
 
 ### 1.3.5 存储过程操作
+
 #### 1.3.5.1 创建无参存储过程
+
 ```sql
 USE db_name;
 GO
@@ -297,6 +327,7 @@ GO
 ```
 
 #### 1.3.5.2 执行存储过程
+
 ```sql
 USE db_name;
 EXEC proc_name;
@@ -304,6 +335,7 @@ GO
 ```
 
 #### 1.3.5.3 创建带参数存储过程
+
 ```sql
 USE db_name;
 GO
@@ -318,6 +350,7 @@ GO
 ```
 
 #### 1.3.5.4 执行带参数存储过程
+
 ```sql
 USE db_name;
 EXEC proc_name '张三', 25;
@@ -325,6 +358,7 @@ GO
 ```
 
 #### 1.3.5.5 创建带输出参数的存储过程
+
 ```sql
 USE db_name;
 GO
@@ -340,6 +374,7 @@ GO
 ```
 
 #### 1.3.5.6 执行带输出参数的存储过程
+
 ```sql
 USE db_name;
 DECLARE @count INT;
@@ -349,12 +384,15 @@ GO
 ```
 
 #### 1.3.5.7 删除存储过程
+
 ```sql
 DROP PROCEDURE IF EXISTS proc_name;
 ```
 
 ### 1.3.6 触发器操作
+
 #### 1.3.6.1 AFTER INSERT 触发器
+
 ```sql
 USE db_name;
 GO
@@ -369,6 +407,7 @@ GO
 ```
 
 #### 1.3.6.2 AFTER UPDATE 触发器
+
 ```sql
 USE db_name;
 GO
@@ -384,6 +423,7 @@ GO
 ```
 
 #### 1.3.6.3 AFTER DELETE 触发器
+
 ```sql
 USE db_name;
 GO
@@ -398,6 +438,7 @@ GO
 ```
 
 #### 1.3.6.4 INSTEAD OF 触发器
+
 ```sql
 USE db_name;
 GO
@@ -412,11 +453,13 @@ GO
 ```
 
 #### 1.3.6.5 删除触发器
+
 ```sql
 DROP TRIGGER IF EXISTS trg_tb_name_insert;
 ```
 
 ### 1.3.7 事务操作
+
 ```sql
 USE db_name;
 GO
@@ -436,6 +479,7 @@ GO
 ```
 
 ### 1.3.8 用户权限操作
+
 ```sql
 -- 创建登录名
 CREATE LOGIN [user_name] WITH PASSWORD = '123456', DEFAULT_DATABASE = db_name;
@@ -459,7 +503,9 @@ DROP LOGIN [user_name];
 ```
 
 ### 1.3.9 其他常用操作
+
 #### 1.3.9.1 生成唯一标识
+
 ```sql
 -- 生成唯一标识（随机）
 NEWID();
@@ -469,6 +515,7 @@ NEWSEQUENTIALID();
 ```
 
 #### 1.3.9.2 分页查询
+
 ```sql
 -- SQL Server 2012+ 推荐使用 OFFSET FETCH
 SELECT * FROM tb_name 

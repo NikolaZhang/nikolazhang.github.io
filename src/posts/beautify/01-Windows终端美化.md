@@ -1,11 +1,11 @@
 ---
-title: windows终端美化
+title: Windows终端美化
 tag:
   - beautify
   - windows
   - terminal
 category: beautify
-description: windows终端美化
+description: Windows终端美化
 date: 2023-03-02
 
 author: nikola
@@ -168,4 +168,3 @@ Set-Alias ls Get-ChildItemColorFormatWide -option AllScope
 Set-Theme qwerty
 oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\qwerty.omp.json" | Invoke-Expression
 ```
-
