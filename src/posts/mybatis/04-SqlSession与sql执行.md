@@ -2,7 +2,7 @@
 title: SqlSession与sql执行
 tag:
   - mybatis
-  - SqlSesssion
+  - SqlSession
 category: mybatis
 description: 关于mybatis parameterHandler的解析
 date: 2021-05-29
@@ -545,6 +545,3 @@ private <E> Object executeForMany(SqlSession sqlSession, Object[] args) {
     return rowValue;
   }
 ```
-
-
-
