@@ -8,7 +8,7 @@ description: 关于mybatis Sql映射文件解析
 date: 2021-04-10
 
 author: nikola
-icon: article
+icon: notebook
 
 isOriginal: true
 sticky: false
@@ -478,7 +478,6 @@ configurationElement方法用于解析mapper节点中的配置. 该方法的代�
 ```
 
 `parameterMapElement`方法用于解析`parameterMap`节点. 解析的结果会通过`ParameterMap`进行封装, `id`为该映射的唯一id, `type`为映射对应的java类型, `parameterMappings`为各个属性的映射信息, 每个属性的映射信息都是一个`ParameterMapping`对象. 最后该`ParameterMap`交给configuration的`Map<String, ParameterMap> parameterMaps`进行管理.
-
 
 `resultMapElement`方法用于解析`resultMap`节点, 该节点的定义见下(只粘贴了部分)
 

@@ -60,6 +60,10 @@ export default hopeTheme({
         blog: {
             excerpt: false
         },
+        icon: {
+            // 关键词: "iconify", "fontawesome", "fontawesome-with-brands"
+            assets: "fontawesome",
+        },
         docsearch: {
             appId: 'DT4A7MCZUJ',
             apiKey: '76028292f26cbfa2c3f547d465359542',
