@@ -124,7 +124,7 @@ Application specific metadata.
 
 | 数据类型              | 关键字/说明                                                         |
 | :-------------------- | :------------------------------------------------------------------ |
-| 核心数据类型          |
+| 核心数据类型          ||
 | string                | text, keyword                                                       |
 | Numeric               | long, integer, short, byte, double, float, half_float, scaled_float |
 | Date                  | date                                                                |
@@ -132,13 +132,13 @@ Application specific metadata.
 | Boolean               | boolean                                                             |
 | Binary                | binary                                                              |
 | Range                 | integer_range, float_range, long_range, double_range, date_range    |
-| 复杂数据类型          |
+| 复杂数据类型          ||
 | Object                | `object` for single JSON objects                                    |
 | Nested                | `nested` for arrays of JSON objects                                 |
-| 地理数据类型          |
+| 地理数据类型          ||
 | Geo-point             | `geo_point` 用于经纬度定位                                          |
 | Geo-shape             | `geo_shape` 用于像多边形这种复杂形状                                |
-| 专用数据类型          |
+| 专用数据类型          ||
 | IP                    | `ip` for IPv4 and IPv6 addresses                                    |
 | Completion datatype   | `completion` 提供自动完成的建议                                     |
 | Token count           | `token_count` 计算字符串中标识数量                                  |

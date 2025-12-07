@@ -109,14 +109,14 @@ static final int hash(Object key) {
 }
 ```
 
-对应不同类型会有不同的hash算法, 此处就不再详述. 但是每次hash之后会异或右移16位, 我们暂且按下不表. 
+对应不同类型会有不同的hash算法, 此处就不再详述. 但是每次hash之后会异或右移16位, 我们暂且按下不表.
 
 对于`putVal(int hash, K key, V value, boolean onlyIfAbsent, boolean evict)` 简单说下后两个参数的含义.
 
 - `onlyIfAbsent` 为true 则不改变已经存在的值
 - `evict` 为false 则table使用创建模式, 这个两个参数之后会进行进一步介绍
 
-`putVal`的实现主要是对table的操作, 具体代码见下:(这篇文章我们主要讲下面这段代码) 
+`putVal`的实现主要是对table的操作, 具体代码见下:(这篇文章我们主要讲下面这段代码)
 
 ```java
 final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
@@ -209,7 +209,7 @@ return newTab;
 遍历oldTab中所有元素, 在当前元素不为null的前提下(如果当前元素为null, 就不用做任何处理).
 
 1. 如果当前元素没有子节点, 就将当期元素放到新数组的e.hash & (newCap - 1)位置上.
-2.如果当前元素为TreeNode类型. 则使用split方法对红黑树进行进行拆分
+2. 如果当前元素为TreeNode类型. 则使用split方法对红黑树进行进行拆分
 3. 如果不是TreeNode类型, 则进行链表的处理
 
 下面分别对2,3两步进行分析

@@ -19,8 +19,6 @@ article: true
 star: false
 ---
 
-# Semaphore深入解析与最佳实践
-
 ## 1. 什么是Semaphore
 
 Semaphore(信号量)是一种线程同步机制，用于控制同时访问共享资源的线程数量。它维护了一个许可集，在许可可用时允许访问共享资源，并在许可被使用时阻塞访问请求。
@@ -293,6 +291,7 @@ Semaphore的核心数据结构在AQS中实现，主要包括：
 3. **同步器实现**：通过Sync的两个子类（FairSync和NonfairSync）实现不同的获取策略
 
 AQS节点状态常量：
+
 - **CANCELLED (1)**：节点已取消
 - **SIGNAL (-1)**：后继节点需要被唤醒
 - **CONDITION (-2)**：节点在条件队列中
@@ -366,6 +365,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer {
 #### 4.4.2 acquire方法深度解析
 
 **Semaphore的acquire方法**：
+
 ```java
 public void acquire() throws InterruptedException {
     // 委托给AQS的acquireSharedInterruptibly方法，请求1个许可
@@ -374,6 +374,7 @@ public void acquire() throws InterruptedException {
 ```
 
 **AQS中的模板方法**：
+
 ```java
 public final void acquireSharedInterruptibly(int arg) throws InterruptedException {
     // 检查线程是否已被中断
@@ -389,6 +390,7 @@ public final void acquireSharedInterruptibly(int arg) throws InterruptedExceptio
 **公平模式与非公平模式对比**：
 
 **1. 非公平模式实现**：
+
 ```java
 // NonfairSync类中的实现
 protected int tryAcquireShared(int acquires) {
@@ -398,6 +400,7 @@ protected int tryAcquireShared(int acquires) {
 ```
 
 **2. 公平模式实现**：
+
 ```java
 // FairSync类中的实现
 protected int tryAcquireShared(int acquires) {
@@ -416,6 +419,7 @@ protected int tryAcquireShared(int acquires) {
 ```
 
 **技术深度分析**：
+
 - **hasQueuedPredecessors()** 方法确保严格的FIFO顺序，防止后来的线程插队获取许可
 - 两种模式的核心差异在于：非公平模式下，新到达的线程可能会先于等待队列中的线程获取许可
 - 非公平模式在高并发场景下通常有更高的吞吐量，但可能导致某些线程长时间饥饿
@@ -424,6 +428,7 @@ protected int tryAcquireShared(int acquires) {
 #### 4.4.3 release方法深度解析
 
 **Semaphore的release方法**：
+
 ```java
 public void release() {
     // 委托给AQS的releaseShared方法，释放1个许可
@@ -432,6 +437,7 @@ public void release() {
 ```
 
 **AQS中的模板方法**：
+
 ```java
 public final boolean releaseShared(int arg) {
     // 尝试释放共享资源
@@ -445,6 +451,7 @@ public final boolean releaseShared(int arg) {
 ```
 
 **Semaphore的释放实现**：
+
 ```java
 // 在Sync基类中实现，公平和非公平模式共用
 protected final boolean tryReleaseShared(int releases) {
@@ -464,12 +471,12 @@ protected final boolean tryReleaseShared(int releases) {
 ```
 
 **关键技术要点**：
+
 - release操作与获取模式无关，公平和非公平模式使用相同的释放实现
 - 使用无锁算法（CAS）确保多线程环境下的原子性
 - 释放操作不会导致线程阻塞，总是立即返回
 - 许可数量可以超过初始值，因为release操作不检查上限（仅防止溢出）
 - 成功释放后，通过doReleaseShared()唤醒等待队列中的线程
-
 
 ### 4.5 Semaphore的工作流程
 
@@ -526,6 +533,7 @@ public boolean tryAcquire(long timeout, TimeUnit unit) throws InterruptedExcepti
 ```
 
 **AQS中的模板方法实现**：
+
 ```java
 public final boolean tryAcquireSharedNanos(int arg, long nanosTimeout) throws InterruptedException {
     // 检查中断状态
@@ -538,6 +546,7 @@ public final boolean tryAcquireSharedNanos(int arg, long nanosTimeout) throws In
 ```
 
 **使用示例**：
+
 ```java
 Semaphore semaphore = new Semaphore(3);
 try {
@@ -560,6 +569,7 @@ try {
 ```
 
 带超时的方法对于避免线程无限期等待非常有用，特别适合以下场景：
+
 - 需要响应性的系统，不能无限等待
 - 实现超时重试逻辑
 - 避免资源死锁
@@ -675,6 +685,7 @@ if (semaphore.tryAcquire(500, TimeUnit.MILLISECONDS)) {
 **问题**：公平模式下性能下降明显
 
 **解决方案**：
+
 - 对性能敏感的场景使用非公平模式
 - 对顺序敏感的场景使用公平模式
 - 考虑使用带超时的tryAcquire作为折中方案
@@ -684,6 +695,7 @@ if (semaphore.tryAcquire(500, TimeUnit.MILLISECONDS)) {
 **问题**：非公平模式下，某些线程可能长时间无法获取许可
 
 **解决方案**：
+
 - 考虑切换到公平模式
 - 增加许可数量
 - 实现线程优先级调度
@@ -693,6 +705,7 @@ if (semaphore.tryAcquire(500, TimeUnit.MILLISECONDS)) {
 **问题**：许可数量过多或过少影响系统性能
 
 **解决方案**：
+
 - 进行性能测试，找到最佳许可数量
 - 考虑动态调整许可数量
 - 监控系统负载，适时调整
@@ -837,5 +850,3 @@ Semaphore是Java并发编程中强大而灵活的工具，通过合理使用，�
 通过本系列文章，我们深入探讨了Semaphore的原理、实现和应用场景。在实际开发中，合理使用Semaphore可以有效控制系统资源的并发访问，提高系统的稳定性和性能。
 
 如果您有任何疑问或建议，请在评论区留言，我们将尽快回复。感谢您的阅读！
-
-

@@ -56,7 +56,7 @@ c. 支持引用跳转
 
 **注意：**  
 
-复制的日志必须包含：`Preparing:`, `Parameters:`。 
+复制的日志必须包含：`Preparing:`, `Parameters:`。
 
 ### 文件生成器
 
@@ -131,5 +131,5 @@ b. 会加载项目中所有的映射关系，用于跳转时加速查找映射�
 
 ## 获取
 
-项目源码地址：https://gitee.com/NikolaZhang/mybatis-tools  
-插件获取地址：https://marketplace.visualstudio.com/items?itemName=nikolazhang.mybatis-tools
+项目源码地址：<https://gitee.com/NikolaZhang/mybatis-tools>  
+插件获取地址：<https://marketplace.visualstudio.com/items?itemName=nikolazhang.mybatis-tools>

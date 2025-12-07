@@ -41,15 +41,13 @@ star: true
 - [ ] 生成视频
 - [ ] 提前计算粒子轨迹数据,性能优化
 
-
-
 ### pygame简单使用
 
 下述程序需要指定环境,需要在运行前指定环境参数. 建议使用test配置. 修改部分参数即可.
 
 #### 绘制图形
 
-1. 各种图形绘制 
+1. 各种图形绘制
 2. 示例程序: [`draw_shape.py`](test/draw/draw_shape.py)
     ![aaa](https://gitee.com/NikolaZhang/music_show/raw/master/resources/image/shapes1.png)
 

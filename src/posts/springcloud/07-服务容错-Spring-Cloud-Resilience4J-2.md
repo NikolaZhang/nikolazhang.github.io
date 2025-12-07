@@ -417,6 +417,7 @@ public void handleRequests(List<Message<String>> messages) {
 5. **缓存结合**：可以与Spring Cache结合使用，减少重复请求
 
 在现代微服务架构中，通常更推荐：
+
 - 使用高效的网络协议（如gRPC）
 - 优化服务端性能
 - 合理设置连接池大小

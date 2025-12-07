@@ -1,10 +1,8 @@
 ﻿---
 isOriginal: true
-title: 微服务 服务注册中心
+title: 微服务Nacos服务注册中心
 update: 2024-01-01
 icon: code
-
-
 tag:
   - nacos
   - springcloud
@@ -19,10 +17,10 @@ star: false
 
 <!--more-->
 
-# Nacos服务注册中心
-
 ## Nacos简介
+
 Nacos是阿里开源的服务注册与发现中心，同时支持配置中心功能，提供了更强大的特性和更好的性能。相比Eureka，Nacos具有以下优势：
+
 - 支持CP和AP模式切换
 - 内置配置中心功能
 - 更丰富的监控和管理功能
@@ -32,6 +30,7 @@ Nacos是阿里开源的服务注册与发现中心，同时支持配置中心功
 ## 部署Nacos服务端
 
 ### 1. 下载Nacos二进制包
+
 Nacos服务端需要通过官方提供的二进制包部署，不建议作为Spring Boot应用程序直接构建。
 
 **下载地址**：[https://github.com/alibaba/nacos/releases](https://github.com/alibaba/nacos/releases)
@@ -40,14 +39,16 @@ Nacos服务端需要通过官方提供的二进制包部署，不建议作为Spr
 
 ### 2. 解压并启动Nacos服务
 
-#### Windows环境：
+#### Windows环境
+
 ```bash
 # 解压下载的zip文件
 # 进入nacos/bin目录
 cmd startup.cmd -m standalone
 ```
 
-#### Linux/Mac环境：
+#### Linux/Mac环境
+
 ```bash
 # 解压下载的tar.gz文件
 tar -xzf nacos-server-2.2.3.tar.gz
@@ -68,11 +69,13 @@ sh startup.sh -m standalone
 Nacos支持通过配置文件进行个性化设置，配置文件位于`nacos/conf/application.properties`：
 
 **修改端口示例**：
+
 ```properties
 server.port=8848
 ```
 
 **使用MySQL持久化示例**：
+
 ```properties
 # 数据源配置
 spring.datasource.platform=mysql
@@ -87,6 +90,7 @@ db.password.0=root
 ## 搭建Nacos集群
 
 ### 1. 集群架构
+
 Nacos集群推荐使用至少3个节点，采用主从复制模式，通过Raft协议保证数据一致性。生产环境建议使用5个节点以获得更好的容错能力。
 
 ### 2. 准备工作
@@ -99,7 +103,8 @@ Nacos集群推荐使用至少3个节点，采用主从复制模式，通过Raft�
 2. **下载Nacos**：
    - 为每个节点下载相同版本的Nacos二进制包
    - 解压到不同目录，例如：
-     ```
+
+     ```plaintext
      /opt/nacos/nacos-node1
      /opt/nacos/nacos-node2
      /opt/nacos/nacos-node3
@@ -111,7 +116,7 @@ Nacos集群推荐使用至少3个节点，采用主从复制模式，通过Raft�
 
 在每个Nacos节点的`conf`目录下，修改`cluster.conf`文件，添加所有集群节点的信息：
 
-```
+```plaintext
 # ip:port
 192.168.1.101:8848
 192.168.1.102:8848
@@ -163,7 +168,8 @@ server.port=8850
 
 分别在每个节点的`bin`目录下执行启动命令：
 
-#### Linux/Mac环境：
+#### Linux/Mac环境
+
 ```bash
 # 节点1
 cd /opt/nacos/nacos-node1/bin
@@ -178,7 +184,8 @@ cd /opt/nacos/nacos-node3/bin
 sh startup.sh
 ```
 
-#### Windows环境：
+#### Windows环境
+
 ```bash
 # 节点1
 cd D:\nacos\nacos-node1\bin
@@ -210,6 +217,7 @@ cmd startup.cmd
 ## 创建Nacos客户端
 
 ### 1. 客户端POM配置
+
 ```xml
 <!-- 添加Nacos客户端依赖 -->
 <dependency>
@@ -219,6 +227,7 @@ cmd startup.cmd
 ```
 
 ### 2. 客户端配置
+
 ```yaml
 server:
   port: 8080
@@ -235,6 +244,7 @@ spring:
 ```
 
 ### 3. 客户端启动类
+
 ```java
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -275,5 +285,3 @@ public class ServiceProviderApplication {
 3. 生产环境建议使用MySQL作为持久化存储
 4. 可以通过namespace和group对服务进行逻辑隔离
 5. Nacos支持配置中心功能，可以在同一个实例中同时使用服务注册和配置管理功能
-
-

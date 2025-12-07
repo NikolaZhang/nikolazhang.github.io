@@ -24,12 +24,15 @@ star: false
 ## 一、并发与并行概述
 
 ### 1.1 并发（Concurrency）
+
 `并发`是指多个任务在**同一时间段内**执行，但在**同一时刻**只有一个任务在CPU上执行。CPU通过时间分片（Time Slicing）技术，为每个任务分配时间片，当一个任务的时间片耗尽时，CPU会切换到其他任务执行。这种切换会产生上下文切换（Context Switch）开销，但能给人一种"同时执行"的错觉。
 
 ### 1.2 并行（Parallelism）
+
 `并行`是指多个任务在**同一时刻**真正同时执行，需要多核CPU支持。每个CPU核心可以独立执行一个任务，实现真正的同时执行。
 
 ### 1.3 并发与并行的区别
+
 | 特性 | 并发 | 并行 |
 |------|------|------|
 | 执行方式 | 时间分片，交替执行 | 多核同时执行 |
@@ -42,6 +45,7 @@ star: false
 Java内存模型定义了线程如何与内存交互，以及变量在多线程环境下的可见性、原子性和有序性。
 
 ### 2.1 JMM的核心结构
+
 JMM将内存分为两类：
 
 - **主内存（Main Memory）**：所有线程共享的内存区域，存储所有变量
@@ -70,6 +74,7 @@ flowchart TD
 ```
 
 ### 2.2 内存原子操作
+
 JMM定义了8种原子操作，用于实现主内存与工作内存之间的交互：
 
 | 操作类型 | 操作 | 作用域 | 描述 |
@@ -84,7 +89,9 @@ JMM定义了8种原子操作，用于实现主内存与工作内存之间的交�
 | 工作内存操作 | store | 工作内存 | 将工作内存变量值传输到主内存 |
 
 ### 2.3 操作规则限制
+
 JMM对这些操作施加了严格的限制：
+
 1. read和load、store和write必须成对出现
 2. 不允许丢弃最近的assign操作
 3. 不允许无原因地将数据写回主内存
@@ -97,22 +104,27 @@ JMM对这些操作施加了严格的限制：
 ## 三、线程安全问题
 
 ### 3.1 线程安全的定义
+
 线程安全是指当多个线程同时访问一个对象时，如果不需要额外的同步控制或协调机制，这个对象的行为仍然是正确的。
 
 ### 3.2 线程安全的三大特性
 
 #### 3.2.1 原子性
+
 原子性是指一个操作是不可中断的，要么全部执行成功，要么全部执行失败。
 
 例如，`x++`不是原子操作，它包含三个步骤：
+
 1. 读取x的值到工作内存
 2. 对x的值加1
 3. 将结果写回主内存
 
 #### 3.2.2 可见性
+
 可见性是指当一个线程修改了共享变量的值，其他线程能够立即看到修改后的结果。
 
 #### 3.2.3 有序性
+
 有序性是指程序执行的顺序按照代码的先后顺序执行。JVM和CPU可能会对指令进行重排序以提高性能，但在单线程环境下不会影响程序的正确性，这就是**as-if-serial**语义。然而在多线程环境下，指令重排序可能会导致意外的结果。
 
 ## 四、同步机制
@@ -122,11 +134,13 @@ JMM对这些操作施加了严格的限制：
 synchronized是Java中最基本的同步机制，可以保证原子性、可见性和有序性。
 
 #### 4.1.1 synchronized的工作原理
+
 - **进入同步块**：将同步块中使用的变量从工作内存中清除，强制从主内存读取
 - **执行同步块**：独占对象锁，其他线程无法进入
 - **退出同步块**：将工作内存中的变量值刷新到主内存，释放对象锁
 
 #### 4.1.2 synchronized的使用方式
+
 ```java
 // 同步方法
 public synchronized void method() {
@@ -146,6 +160,7 @@ public void method() {
 volatile是一种轻量级的同步机制，只保证可见性和有序性，不保证原子性。
 
 #### 4.2.1 volatile的工作原理
+
 - **写操作**：当写入volatile变量时，JMM会将线程本地内存中的变量刷新到主内存
 - **读操作**：当读取volatile变量时，JMM会将线程本地内存置为无效，强制从主内存读取
 
@@ -170,6 +185,7 @@ flowchart TD
 volatile关键字的实现依赖于硬件平台的内存屏障指令，不同的CPU架构有不同的实现方式。
 
 ##### 4.2.2.1 字节码层面
+
 当使用volatile修饰变量时，编译器会在生成的字节码中添加一个`ACC_VOLATILE`标志。
 
 ```java
@@ -182,6 +198,7 @@ flags: ACC_PRIVATE, ACC_VOLATILE
 ```
 
 ##### 4.2.2.2 JVM层面
+
 JVM会根据`ACC_VOLATILE`标志，在volatile变量的读写操作前后插入内存屏障指令。
 
 ```java
@@ -197,11 +214,14 @@ loadStoreBarrier
 ```
 
 ##### 4.2.2.3 硬件层面
+
 不同的CPU架构有不同的内存屏障指令：
+
 - **x86架构**：使用`lock`前缀指令来实现内存屏障
 - **ARM架构**：使用`dmb`（数据内存屏障）、`dsb`（数据同步屏障）等指令
 
 在x86架构中，volatile写操作会被转换为带有`lock`前缀的指令，这会：
+
 1. 确保指令的原子性
 2. 禁止该指令与之前的指令重排序
 3. 将写缓冲区的数据刷新到主内存
@@ -210,11 +230,13 @@ loadStoreBarrier
 需要注意的是，在x86架构中，大多数内存屏障是免费的，只有StoreLoad屏障需要显式实现。这是因为x86架构本身提供了较强的内存序保证。
 
 #### 4.2.3 volatile的使用场景
+
 1. 状态标记量
 2. 双重检查锁定（DCL）
 3. 单例模式中的instance变量
 
 #### 4.2.4 volatile不保证原子性的示例
+
 ```java
 public class VolatileAtomicTest {
     private static volatile int count = 0;
@@ -241,6 +263,7 @@ public class VolatileAtomicTest {
 #### 4.2.5 volatile的正确使用示例
 
 ##### 4.2.5.1 状态标记量
+
 ```java
 public class VolatileFlagDemo {
     private volatile boolean running = true;
@@ -278,6 +301,7 @@ public class VolatileFlagDemo {
 ```
 
 ##### 4.2.5.2 双重检查锁定模式(DCL)
+
 ```java
 public class Singleton {
     // 必须使用volatile，防止指令重排序导致的问题
@@ -344,6 +368,7 @@ flowchart TD
 ```
 
 #### 5.2.2 volatile的内存屏障实现
+
 - 写操作：在写操作前插入StoreStore屏障，写操作后插入StoreLoad屏障
 - 读操作：在读操作前插入LoadLoad屏障，读操作后插入LoadStore屏障
 
@@ -414,11 +439,13 @@ MESI协议在实际实现中会有一些优化：
 #### 6.2.3 MESI协议的优缺点
 
 **优点**：
+
 - 实现简单，易于理解
 - 能够保证缓存一致性
 - 性能较好，特别是在读取操作频繁的场景
 
 **缺点**：
+
 - 写操作的开销较大，需要等待所有Invalid Acknowledge消息
 - 可能导致总线流量较大
 - 在某些场景下可能会出现缓存颠簸（Cache Thrashing）
@@ -460,6 +487,7 @@ public class MesiDemo {
 ```
 
 执行流程分析：
+
 1. 线程2优先执行，读取commonInt=0，缓存行状态变为E（Exclusive）
 2. 线程1开始执行，尝试读取commonInt，由于线程2缓存中存在该数据，两个线程的缓存行状态都变为S（Shared）
 3. 线程2继续读取，缓存行状态保持S
@@ -500,6 +528,7 @@ flowchart TD
 ### 7.2 避免伪共享的方法
 
 #### 7.2.1 字节填充（JDK 8之前）
+
 通过添加无用字段填充缓存行，避免多个变量出现在同一缓存行。
 
 ```java
@@ -512,6 +541,7 @@ public class PaddingDemo {
 ```
 
 #### 7.2.2 @Contended注解（JDK 8及以后）
+
 JDK 8提供了`@sun.misc.Contended`注解来解决伪共享问题。
 
 ```java
@@ -524,12 +554,14 @@ public class ContendedDemo {
 ```
 
 使用时需要添加JVM参数：
+
 - `-XX:-RestrictContended`：允许在用户代码中使用@Contended注解
 - `-XX:ContendedPaddingWidth=128`：设置填充宽度（默认128字节）
 
 ## 八、最佳实践
 
 ### 8.1 volatile的使用建议
+
 1. 只用于修饰简单类型变量（int、long等）
 2. 变量的写入操作不依赖其当前值
 3. 不需要保证原子性的场景
@@ -537,6 +569,7 @@ public class ContendedDemo {
 5. 与Atomic类结合使用，实现更复杂的原子操作
 
 ### 8.2 高性能并发编程技巧
+
 1. 减少锁的粒度（如ConcurrentHashMap的分段锁）
 2. 使用无锁数据结构（如Atomic类）
 3. 避免伪共享（使用字节填充或@Contended注解）
@@ -548,6 +581,7 @@ public class ContendedDemo {
 ### 8.3 常见并发陷阱
 
 #### 8.3.1 死锁
+
 ```java
 public class DeadlockDemo {
     private final Object lock1 = new Object();
@@ -590,7 +624,9 @@ public class DeadlockDemo {
 ```
 
 #### 8.3.2 活锁
+
 活锁是指线程不断尝试但无法取得进展的情况。
+
 ```java
 public class LivelockDemo {
     private int count = 0;
@@ -633,7 +669,9 @@ public class LivelockDemo {
 ```
 
 #### 8.3.3 饥饿
+
 饥饿是指线程永远无法获得所需的资源，导致无法继续执行。
+
 ```java
 public class StarvationDemo {
     private final Object lock = new Object();

@@ -25,6 +25,7 @@ star: false
 AQS(AbstractQueuedSynchronizer)是Java并发包中最核心的组件之一，它提供了一个框架，用于构建锁和同步器。ReentrantLock、Semaphore、CountDownLatch、CyclicBarrier等并发工具类都是基于AQS实现的。
 
 AQS的核心思想是：
+
 1. 维护一个状态变量，用于表示同步状态
 2. 使用FIFO队列来管理等待线程
 3. 提供模板方法，允许子类自定义同步策略
@@ -40,6 +41,7 @@ private volatile int state;
 ```
 
 不同的同步器可以根据需要定义状态的含义：
+
 - **ReentrantLock**：state表示锁的重入次数
 - **Semaphore**：state表示可用许可证数量
 - **CountDownLatch**：state表示计数器的值
@@ -68,6 +70,7 @@ static final class Node {
 ```
 
 节点状态（waitStatus）的可能取值：
+
 - **CANCELLED(1)**：节点已取消
 - **SIGNAL(-1)**：后继节点需要被唤醒
 - **CONDITION(-2)**：节点在条件队列中
@@ -201,6 +204,7 @@ public final void acquire(int arg) {
 ```
 
 `acquire`方法的执行步骤：
+
 1. 调用`tryAcquire`方法尝试获取锁
 2. 如果获取成功，直接返回
 3. 如果获取失败，调用`addWaiter`方法将当前线程加入等待队列
@@ -237,6 +241,7 @@ public final boolean release(int arg) {
 ```
 
 `release`方法的执行步骤：
+
 1. 调用`tryRelease`方法尝试释放锁
 2. 如果释放成功，获取等待队列的头节点
 3. 如果头节点不为空且状态不为0，调用`unparkSuccessor`方法唤醒后继节点
@@ -267,6 +272,7 @@ public final void acquireShared(int arg) {
 ```
 
 `acquireShared`方法的执行步骤：
+
 1. 调用`tryAcquireShared`方法尝试获取共享锁
 2. 如果返回值大于等于0，表示获取成功，直接返回
 3. 如果返回值小于0，表示获取失败，调用`doAcquireShared`方法在队列中等待获取锁
@@ -299,6 +305,7 @@ public final boolean releaseShared(int arg) {
 ```
 
 `releaseShared`方法的执行步骤：
+
 1. 调用`tryReleaseShared`方法尝试释放共享锁
 2. 如果释放成功，调用`doReleaseShared`方法唤醒等待队列中的后继节点
 3. 返回释放结果
@@ -492,6 +499,7 @@ AQS只在必要时使用锁，例如在管理等待队列时，减少了锁竞�
 AQS是Java并发包中最核心的组件之一，它提供了一个框架，用于构建锁和同步器。AQS的核心思想是维护一个状态变量和一个等待队列，通过模板方法模式允许子类自定义同步策略。
 
 AQS的主要特点包括：
+
 1. 高效的状态管理
 2. 无锁队列操作
 3. 支持独占锁和共享锁

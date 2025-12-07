@@ -93,7 +93,7 @@ infoServiceProxy.update();
 
 运行结果:
 
-```
+```plaintext
 =====demo.service.InfoService@1c6b6478
 demo.service.InfoService.select
 =====demo.service.InfoService@67f89fa3
@@ -124,7 +124,7 @@ public void testLazyLoader() {
 
 运行结果:
 
-```
+```plaintext
 =====demo.service.InfoService@1c6b6478
 demo.service.InfoService@1c6b6478
 demo.service.InfoService.select

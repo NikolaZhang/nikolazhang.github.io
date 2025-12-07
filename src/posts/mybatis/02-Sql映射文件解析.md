@@ -298,7 +298,7 @@ AnnotationWrapper(Annotation annotation) {
 
 #### parseStatement
 
-该方法用于将接口上的sql注解中的信息, 转换成`MappedStatement`类型, 并使用`Map<String, MappedStatement> mappedStatements`管理已经解析过的statement. 
+该方法用于将接口上的sql注解中的信息, 转换成`MappedStatement`类型, 并使用`Map<String, MappedStatement> mappedStatements`管理已经解析过的statement.
 
 在`MappedStatement`类中比较重要的类有:
 
@@ -439,7 +439,6 @@ private XMLMapperBuilder(XPathParser parser, Configuration configuration, String
 ```
 
 ### parse
-
 
 ```java
   public void parse() {
@@ -614,7 +613,6 @@ private ResultMap resultMapElement(XNode resultMapNode, List<ResultMapping> addi
 
 与java注解方式类似，同样需要构建`MappedStatement`对象，并放入`Map<String, MappedStatement> mappedStatements`中，但由于xml中可以使用sql片段因此需要使用`XMLIncludeTransformer`对sql片段进行处理。
 
-
 ```java
 public void parseStatementNode() {
   String id = context.getStringAttribute("id");
@@ -722,4 +720,3 @@ parsePendingStatements();
 ```
 
 这三个方法用于处理之前解析过程中出现异常没有完成解析的对象.
-

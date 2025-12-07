@@ -19,8 +19,6 @@ article: true
 star: false
 ---
 
-# ReentrantLock深入解析与最佳实践
-
 ## 1. 什么是ReentrantLock
 
 ReentrantLock是Java并发包中的一种可重入互斥锁，提供了比内置synchronized关键字更灵活的线程同步机制。它允许线程重新获取已经持有的锁，从而避免了死锁问题。
@@ -538,6 +536,7 @@ class ProducerConsumer {
 **问题**：多个线程互相等待对方持有的锁
 
 **解决方案**：
+
 - 统一锁的获取顺序
 - 使用带超时的锁获取
 - 使用LockSupport检测和避免死锁

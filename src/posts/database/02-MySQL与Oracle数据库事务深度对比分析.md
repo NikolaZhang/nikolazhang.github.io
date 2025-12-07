@@ -40,12 +40,14 @@ icon: code
 MySQL的事务管理主要依赖于存储引擎，其中InnoDB是最常用的支持事务的存储引擎。
 
 **核心组件：**
+
 - **Undo Log**：用于事务回滚和MVCC（多版本并发控制）
 - **Redo Log**：用于崩溃恢复，确保事务的持久性
 - **Binlog**：用于主从复制和数据恢复
 - **锁机制**：包括行锁、表锁、间隙锁等
 
 **事务处理流程：**
+
 ```mermaid
 flowchart TD
     A[开始事务] --> B[执行SQL语句]
@@ -70,6 +72,7 @@ MySQL支持以下四个事务隔离级别：
 | SERIALIZABLE | 禁止 | 禁止 | 禁止 |
 
 **实现方式：**
+
 - **READ COMMITTED**：使用当前读和快照读，每次SELECT都会生成新的快照
 - **REPEATABLE READ**：使用MVCC，整个事务期间使用同一个快照
 - **SERIALIZABLE**：使用共享锁和排它锁，强制串行执行
@@ -77,11 +80,13 @@ MySQL支持以下四个事务隔离级别：
 ### 2.3 MySQL锁机制
 
 **锁的分类：**
+
 - **按粒度**：行锁、表锁、间隙锁、临键锁
 - **按类型**：共享锁（S锁）、排他锁（X锁）
 - **按使用方式**：自动锁、显式锁
 
 **InnoDB锁算法：**
+
 - **Record Lock**：行锁，锁定索引记录
 - **Gap Lock**：间隙锁，锁定索引之间的间隙
 - **Next-Key Lock**：临键锁，Record Lock + Gap Lock的组合
@@ -89,6 +94,7 @@ MySQL支持以下四个事务隔离级别：
 ### 2.4 MySQL事务回滚机制
 
 MySQL使用Undo Log实现事务回滚：
+
 1. 每个修改操作都会生成相应的Undo记录
 2. 回滚时，根据Undo记录执行相反的操作
 3. Undo Log还用于实现MVCC的快照读
@@ -100,12 +106,14 @@ MySQL使用Undo Log实现事务回滚：
 Oracle的事务管理是基于日志的，具有高度的可靠性和并发性能。
 
 **核心组件：**
+
 - **Redo Log**：用于崩溃恢复和实例恢复
 - **Undo Tablespace**：用于事务回滚和读一致性
 - **Rollback Segment**：Oracle 9i之前使用，现在主要使用Undo Tablespace
 - **锁机制**：主要是行级锁，通过位图实现
 
 **事务处理流程：**
+
 ```mermaid
 flowchart TD
     A[开始事务] --> B[执行SQL语句]
@@ -130,6 +138,7 @@ Oracle支持以下三个事务隔离级别：
 | READ ONLY | 禁止 | 禁止 | 禁止（只读事务） |
 
 **注意事项：**
+
 - Oracle默认隔离级别是READ COMMITTED
 - Oracle不支持READ UNCOMMITTED和REPEATABLE READ隔离级别
 - Oracle的SERIALIZABLE实现与MySQL不同，采用乐观并发控制
@@ -137,11 +146,13 @@ Oracle支持以下三个事务隔离级别：
 ### 3.3 Oracle锁机制
 
 **锁的分类：**
+
 - **按粒度**：行锁、表锁、页锁
 - **按类型**：共享锁（S锁）、排他锁（X锁）、意向锁等
 - **按模式**：自动锁（DML锁）、显式锁（DDL锁）
 
 **Oracle锁的特点：**
+
 - 行锁是默认的，且是无索引依赖的
 - 使用位图技术实现行锁，开销小
 - 支持死锁检测和自动解决
@@ -149,6 +160,7 @@ Oracle支持以下三个事务隔离级别：
 ### 3.4 Oracle事务回滚机制
 
 Oracle使用Undo Tablespace实现事务回滚：
+
 1. 每个修改操作都会在Undo表空间中生成Undo记录
 2. 回滚时，根据Undo记录执行相反的操作
 3. Undo记录还用于实现读一致性

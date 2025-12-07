@@ -31,7 +31,7 @@ star: true
 4. 需要注意的是直接修改此处的配置文件是无效的。运行时使用的配置文件目录为：`/etc/nps/conf/`。
 5. 我的配置为：
   
-  ```
+  ```plaintext
   appname = nps
   #Boot mode(dev|pro)
   runmode = pro
@@ -107,5 +107,3 @@ star: true
 ![windows](https://tech-nikola.nikolazhang.top/tools/nps/nps-win-remote.png)
 
 输入远程电脑的账号密码就可以访问了。
-
-

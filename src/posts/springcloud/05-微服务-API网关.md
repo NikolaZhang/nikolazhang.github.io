@@ -166,7 +166,7 @@ INSERT INTO `communicate_db`.`role_permission` VALUES (6, 1, 1, '2020-03-02 17:5
 
 因为有个大计划, 所以这里我对模块可能分的有些细粒度. 由于是刚开始所以还算是清晰明了.
 
-1. zookeeper注册中心, 这是微服务必不可少的. 当然了你也可以使用eureka或nacos. 
+1. zookeeper注册中心, 这是微服务必不可少的. 当然了你也可以使用eureka或nacos.
 2. 网关模块, 这里使用的是Spring Cloud Gateway, 这是Spring Cloud官方推荐的网关解决方案, 替代了Netflix Zuul.
 3. 服务模块, 就是单纯的spring mvc而已.
 4. 另外通过feign调用相应模块中的资源, 因为在网关鉴权的时候, 有些资源是要从服务模块中获取的.
@@ -276,139 +276,140 @@ spring:
 
 1. 首先引入依赖:
 
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-<!-- Spring Cloud Gateway需要使用响应式Security -->
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-config</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-webflux</artifactId>
-</dependency>
-```
+    ```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <!-- Spring Cloud Gateway需要使用响应式Security -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-webflux</artifactId>
+    </dependency>
+    ```
 
-这样我们的应用在启动之后会默认生成一个账号user, 密码会打印在日志中. 当你访问资源时, 会让你进行登录. 当然这不是我们想要的. 为了实现上面说的效果我们要自定义security的一些配置.
+    这样我们的应用在启动之后会默认生成一个账号user, 密码会打印在日志中. 当你访问资源时, 会让你进行登录. 当然这不是我们想要的. 为了实现上面说的效果我们要自定义security的一些配置.
+
 2. 配置security
 Spring Cloud Gateway是响应式的，需要使用`SecurityWebFilterChain`来配置安全策略
 
-```java
-@Configuration
-@EnableWebFluxSecurity
-public class SecurityConfig {
+    ```java
+    @Configuration
+    @EnableWebFluxSecurity
+    public class SecurityConfig {
 
-    private final UserDetailsRepositoryReactiveAuthenticationManager authenticationManager;
-    private final ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer;
+        private final UserDetailsRepositoryReactiveAuthenticationManager authenticationManager;
+        private final ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer;
 
-    @Autowired
-    public SecurityConfig(ReactiveUserDetailsService userDetailsService, 
-                         PasswordEncoder passwordEncoder, 
-                         ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer) {
-        this.authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
-        this.authenticationManager.setPasswordEncoder(passwordEncoder);
-        this.authorizeExchangeCustomizer = authorizeExchangeCustomizer;
+        @Autowired
+        public SecurityConfig(ReactiveUserDetailsService userDetailsService, 
+                            PasswordEncoder passwordEncoder, 
+                            ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer) {
+            this.authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+            this.authenticationManager.setPasswordEncoder(passwordEncoder);
+            this.authorizeExchangeCustomizer = authorizeExchangeCustomizer;
+        }
+
+        @Bean
+        public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+            http
+                .formLogin()
+                .and()
+                .authorizeExchange(authorizeExchangeCustomizer)
+                .authenticationManager(authenticationManager)
+                .csrf().disable(); // 生产环境请根据实际情况配置CSRF保护
+            return http.build();
+        }
     }
-
-    @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http
-            .formLogin()
-            .and()
-            .authorizeExchange(authorizeExchangeCustomizer)
-            .authenticationManager(authenticationManager)
-            .csrf().disable(); // 生产环境请根据实际情况配置CSRF保护
-        return http.build();
-    }
-}
-```
+    ```
 
 3. 自定义权限检查组件
 
-```java
-@Component
-public class CustomAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+    ```java
+    @Component
+    public class CustomAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
-    private final UserClient userClient;
+        private final UserClient userClient;
 
-    @Autowired
-    public CustomAuthorizationManager(UserClient userClient) {
-        this.userClient = userClient;
-    }
+        @Autowired
+        public CustomAuthorizationManager(UserClient userClient) {
+            this.userClient = userClient;
+        }
 
-    @Override
-    public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext authorizationContext) {
-        ServerWebExchange exchange = authorizationContext.getExchange();
-        ServerHttpRequest request = exchange.getRequest();
-        String path = request.getURI().getPath();
-        String method = request.getMethodValue();
+        @Override
+        public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext authorizationContext) {
+            ServerWebExchange exchange = authorizationContext.getExchange();
+            ServerHttpRequest request = exchange.getRequest();
+            String path = request.getURI().getPath();
+            String method = request.getMethodValue();
 
-        return authenticationMono
-            .flatMap(authentication -> {
-                if (authentication.isAuthenticated()) {
-                    // 获取用户权限
-                    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-                    List<String> userRoles = authorities.stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.toList());
+            return authenticationMono
+                .flatMap(authentication -> {
+                    if (authentication.isAuthenticated()) {
+                        // 获取用户权限
+                        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+                        List<String> userRoles = authorities.stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.toList());
 
-                    // 检查用户是否有顶级权限
-                    if (userRoles.contains(PermissionRoleConstant.ROLE_NIKOLA)) {
-                        return Mono.just(new AuthorizationDecision(true));
+                        // 检查用户是否有顶级权限
+                        if (userRoles.contains(PermissionRoleConstant.ROLE_NIKOLA)) {
+                            return Mono.just(new AuthorizationDecision(true));
+                        }
+
+                        // 获取所有权限配置
+                        return userClient.listPermissionRoles()
+                            .flatMapIterable(Function.identity())
+                            .filter(permissionRole -> {
+                                // 匹配路径和方法
+                                AntPathMatcher pathMatcher = new AntPathMatcher();
+                                return pathMatcher.match(permissionRole.getUrl(), path) && 
+                                    permissionRole.getMethod().equals(method);
+                            })
+                            .map(PermissionRoleDO::getRoleCode)
+                            .collectList()
+                            .flatMap(requiredRoles -> {
+                                // 如果没有配置该资源的权限，需要顶级权限
+                                if (requiredRoles.isEmpty()) {
+                                    return Mono.just(new AuthorizationDecision(false));
+                                }
+                                // 检查用户是否有至少一个所需权限
+                                boolean hasPermission = requiredRoles.stream()
+                                    .anyMatch(userRoles::contains);
+                                return Mono.just(new AuthorizationDecision(hasPermission));
+                            });
                     }
-
-                    // 获取所有权限配置
-                    return userClient.listPermissionRoles()
-                        .flatMapIterable(Function.identity())
-                        .filter(permissionRole -> {
-                            // 匹配路径和方法
-                            AntPathMatcher pathMatcher = new AntPathMatcher();
-                            return pathMatcher.match(permissionRole.getUrl(), path) && 
-                                   permissionRole.getMethod().equals(method);
-                        })
-                        .map(PermissionRoleDO::getRoleCode)
-                        .collectList()
-                        .flatMap(requiredRoles -> {
-                            // 如果没有配置该资源的权限，需要顶级权限
-                            if (requiredRoles.isEmpty()) {
-                                return Mono.just(new AuthorizationDecision(false));
-                            }
-                            // 检查用户是否有至少一个所需权限
-                            boolean hasPermission = requiredRoles.stream()
-                                .anyMatch(userRoles::contains);
-                            return Mono.just(new AuthorizationDecision(hasPermission));
-                        });
-                }
-                return Mono.just(new AuthorizationDecision(false));
-            });
+                    return Mono.just(new AuthorizationDecision(false));
+                });
+        }
     }
-}
-```
+    ```
 
 4. 配置权限检查器
 
-```java
-@Configuration
-public class AuthorizationConfig {
+    ```java
+    @Configuration
+    public class AuthorizationConfig {
 
-    private final CustomAuthorizationManager customAuthorizationManager;
+        private final CustomAuthorizationManager customAuthorizationManager;
 
-    @Autowired
-    public AuthorizationConfig(CustomAuthorizationManager customAuthorizationManager) {
-        this.customAuthorizationManager = customAuthorizationManager;
+        @Autowired
+        public AuthorizationConfig(CustomAuthorizationManager customAuthorizationManager) {
+            this.customAuthorizationManager = customAuthorizationManager;
+        }
+
+        @Bean
+        public ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer() {
+            return exchanges -> exchanges
+                .pathMatchers("/favicon.ico").permitAll() // 忽略静态资源
+                .anyExchange().access(customAuthorizationManager);
+        }
     }
-
-    @Bean
-    public ServerHttpSecurity.Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> authorizeExchangeCustomizer() {
-        return exchanges -> exchanges
-            .pathMatchers("/favicon.ico").permitAll() // 忽略静态资源
-            .anyExchange().access(customAuthorizationManager);
-    }
-}
-```
+    ```
 
 我们下面详细看一下这些类或者对象的具体信息.
 
@@ -478,6 +479,7 @@ public class ReactiveUserDetailServiceImpl implements ReactiveUserDetailsService
 在响应式Security中，我们不再使用`FilterInvocationSecurityMetadataSource`和`AccessDecisionManager`，而是使用`ReactiveAuthorizationManager`来统一处理权限检查逻辑。
 
 在前面的配置中，我们已经定义了`CustomAuthorizationManager`，它负责：
+
 1. 获取当前请求的路径和方法
 2. 获取用户的权限信息
 3. 检查用户是否有顶级权限
@@ -530,8 +532,6 @@ public final class PermissionRoleConstant {
 ![20200304153522](http://dewy-blog.nikolazh.eu.org/20200304153522.png)
 ![20200304153532](http://dewy-blog.nikolazh.eu.org/20200304153532.png)
 ![20200304153455](http://dewy-blog.nikolazh.eu.org/20200304153455.png)
-
-**可以看到结果符合预期**
 
 ## end
 

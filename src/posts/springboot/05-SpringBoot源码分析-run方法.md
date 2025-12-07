@@ -101,7 +101,7 @@ public static void main(String[] args) throws InterruptedException {
 
 可以看一下输出结果:
 
-```
+```plaintext
 StopWatch '单线程统计': running time = 3001237499 ns
 ---------------------------------------------
 ns         %     Task name
@@ -218,7 +218,7 @@ public class Test {
 
 结果如下:
 
-```
+```plaintext
 21:05:58.827 [pool-1-thread-2] INFO com.nikola.management.Test - thread2, task1
 21:05:58.827 [pool-1-thread-3] INFO com.nikola.management.Test - thread3, task1
 21:05:58.827 [pool-1-thread-1] INFO com.nikola.management.Test - thread1, task1

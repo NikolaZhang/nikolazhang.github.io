@@ -106,7 +106,7 @@ public class TestProxy {
 
 运行结果:
 
-```
+```plaintext
 ====== 创建订单
 ====== 售出票了
 ====== 通知用户购票成功

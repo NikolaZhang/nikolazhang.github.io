@@ -19,8 +19,6 @@ article: true
 star: false
 ---
 
-# CountDownLatch深入解析与最佳实践
-
 ## 1. 什么是CountDownLatch
 
 CountDownLatch是Java并发包中的一种同步工具，用于协调多个线程的执行。它允许一个或多个线程等待，直到其他线程完成一组操作后再继续执行。
@@ -359,18 +357,20 @@ private static final class Sync extends AbstractQueuedSynchronizer {
 CountDownLatch提供了两种await()方法：
 
 1. **可中断的等待**：
-```java
-public void await() throws InterruptedException {
-    sync.acquireSharedInterruptibly(1);
-}
-```
+
+    ```java
+    public void await() throws InterruptedException {
+        sync.acquireSharedInterruptibly(1);
+    }
+    ```
 
 2. **带超时的等待**：
-```java
-public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-    return sync.tryAcquireSharedNanos(1, unit.toNanos(timeout));
-}
-```
+
+    ```java
+    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+        return sync.tryAcquireSharedNanos(1, unit.toNanos(timeout));
+    }
+    ```
 
 这些方法最终调用AQS的共享模式获取方法，利用AQS的队列机制实现线程等待。
 
@@ -385,6 +385,7 @@ public void countDown() {
 ```
 
 它调用AQS的releaseShared方法，该方法会：
+
 1. 调用tryReleaseShared尝试释放共享资源
 2. 如果释放成功且需要唤醒后续线程，则执行doReleaseShared唤醒等待线程
 
@@ -479,11 +480,13 @@ if (latch.await(30, TimeUnit.SECONDS)) {
 **症状**：等待线程永远阻塞在await()方法
 
 **原因**：
+
 - 计数器初始值设置错误
 - 部分线程未调用countDown()
 - 线程执行过程中发生未捕获的异常
 
 **解决方案**：
+
 - 仔细检查计数器初始值
 - 使用finally块确保countDown()被调用
 - 添加异常处理和日志记录
@@ -494,10 +497,12 @@ if (latch.await(30, TimeUnit.SECONDS)) {
 **症状**：CountDownLatch对象无法被垃圾回收
 
 **原因**：
+
 - 等待线程被中断或取消，但CountDownLatch仍被引用
 - 工作线程执行缓慢或阻塞
 
 **解决方案**：
+
 - 及时释放对CountDownLatch的引用
 - 使用try-with-resources或显式清理
 - 监控线程执行状态
@@ -507,10 +512,12 @@ if (latch.await(30, TimeUnit.SECONDS)) {
 **症状**：高并发场景下性能下降
 
 **原因**：
+
 - 大量线程同时等待
 - 频繁的countDown()调用导致CAS竞争
 
 **解决方案**：
+
 - 考虑使用CyclicBarrier替代（如果需要重复使用）
 - 减少等待线程数量
 - 优化任务执行逻辑，减少CAS竞争

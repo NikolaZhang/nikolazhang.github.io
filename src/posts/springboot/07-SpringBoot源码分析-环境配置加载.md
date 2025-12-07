@@ -26,7 +26,7 @@ ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationA
 configureIgnoreBeanInfo(environment);
 ```
 
-## ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+## ApplicationArguments applicationArguments = new DefaultApplicationArguments(args)
 
 ```java
 public DefaultApplicationArguments(String... args) {
@@ -96,7 +96,7 @@ public CommandLineArgs parse(String... args) {
 }
 ```
 
-## ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
+## ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments)
 
 ```java
 private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,

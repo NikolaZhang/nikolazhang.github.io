@@ -63,6 +63,7 @@ flowchart TD
 ```
 
 **结构特点：**
+
 - 所有叶子节点在同一层级
 - 每个节点包含多个键值和指针
 - 叶子节点包含索引列值和指向表数据的ROWID
@@ -84,7 +85,7 @@ flowchart TD
 
 位图索引为每个不同的键值创建一个位图，位图中的每一位表示对应行是否包含该键值。
 
-```
+```plaintext
 键值: '男'  '女'
 行号: 1     0     1
       2     1     0
@@ -95,11 +96,13 @@ flowchart TD
 #### 2.2.2 位图索引优缺点
 
 **优点：**
+
 - 存储空间小（位图压缩存储）
 - 适合用于AND/OR查询
 - 高效支持COUNT和聚合操作
 
 **缺点：**
+
 - 不适合高并发更新场景
 - 在OLTP系统中性能较差
 - 更新操作会导致锁争用
@@ -223,11 +226,13 @@ SELECT * FROM emp WHERE deptno = 10 OR job = 'MANAGER';
 #### 4.3.1 案例1：单表查询优化
 
 **原始查询（可能全表扫描）：**
+
 ```sql
 SELECT * FROM emp WHERE hiredate > TO_DATE('2020-01-01', 'YYYY-MM-DD');
 ```
 
 **优化方案：**
+
 ```sql
 -- 创建索引
 CREATE INDEX emp_hiredate_idx ON emp(hiredate);
@@ -239,11 +244,13 @@ SELECT * FROM emp WHERE hiredate > TO_DATE('2020-01-01', 'YYYY-MM-DD');
 #### 4.3.2 案例2：复合索引优化
 
 **查询：**
+
 ```sql
 SELECT ename, sal FROM emp WHERE deptno = 10 AND job = 'MANAGER';
 ```
 
 **优化方案：**
+
 ```sql
 -- 创建复合索引（将选择性高的列放在前面）
 CREATE INDEX emp_deptno_job_idx ON emp(deptno, job);
@@ -255,11 +262,13 @@ CREATE INDEX emp_deptno_job_ename_sal_idx ON emp(deptno, job, ename, sal);
 #### 4.3.3 案例3：函数索引优化
 
 **查询：**
+
 ```sql
 SELECT * FROM emp WHERE UPPER(ename) = 'SMITH';
 ```
 
 **优化方案：**
+
 ```sql
 -- 创建函数索引
 CREATE INDEX emp_upper_ename_idx ON emp(UPPER(ename));
@@ -284,6 +293,7 @@ SELECT * FROM emp WHERE deptno = 10;
 ```
 
 **执行计划中的索引相关操作：**
+
 - INDEX UNIQUE SCAN：唯一索引扫描
 - INDEX RANGE SCAN：范围索引扫描
 - INDEX FULL SCAN：全索引扫描
@@ -303,36 +313,42 @@ SELECT * FROM emp WHERE deptno = 10;
 ### 5.2 索引维护最佳实践
 
 1. **定期重建碎片化索引**：
-```sql
-ALTER INDEX emp_ename_idx REBUILD;
-```
+
+    ```sql
+    ALTER INDEX emp_ename_idx REBUILD;
+    ```
 
 2. **收集统计信息**：
-```sql
-EXEC DBMS_STATS.gather_table_stats('SCOTT', 'EMP', cascade => TRUE);
-```
+
+    ```sql
+    EXEC DBMS_STATS.gather_table_stats('SCOTT', 'EMP', cascade => TRUE);
+    ```
 
 3. **监控索引使用情况**：
-```sql
-SELECT index_name, table_name, used
-FROM v$object_usage;
-```
+
+    ```sql
+    SELECT index_name, table_name, used
+    FROM v$object_usage;
+    ```
 
 4. **删除未使用的索引**：
-```sql
-DROP INDEX unused_index_name;
-```
+
+    ```sql
+    DROP INDEX unused_index_name;
+    ```
 
 ## 六、索引与性能调优
 
 ### 6.1 索引对性能的影响
 
 **正面影响：**
+
 - 加速查询响应时间
 - 减少I/O操作
 - 优化排序操作
 
 **负面影响：**
+
 - 增加存储空间
 - 降低INSERT/UPDATE/DELETE性能
 - 增加数据库维护成本
@@ -340,12 +356,14 @@ DROP INDEX unused_index_name;
 ### 6.2 OLTP与OLAP系统索引策略
 
 **OLTP系统：**
+
 - 优先考虑B树索引
 - 避免位图索引
 - 控制索引数量
 - 关注高选择性列
 
 **OLAP系统：**
+
 - 可以使用位图索引
 - 支持函数索引
 - 考虑分区索引

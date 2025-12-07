@@ -39,6 +39,7 @@ public enum State {
 ### 2. 线程状态详细解析
 
 1. **新建状态(New)**: 线程对象被创建后，尚未调用start()方法。
+
    ```java
    Thread thread = new Thread(); // 线程处于NEW状态
    ```
@@ -276,6 +277,7 @@ public class SpinLock {
 ### 3. 锁的优化技术
 
 #### 1. 锁消除(Lock Elimination)
+
 JVM自动分析代码，移除不必要的锁
 
 ```java
@@ -289,6 +291,7 @@ public String concat(String s1, String s2) {
 ```
 
 #### 2. 锁粗化(Lock Coarsening)
+
 将多个连续的锁合并为一个大锁，减少锁的获取和释放次数
 
 ```java
@@ -308,6 +311,7 @@ for (int i = 0; i < 100; i++) {
 ```
 
 #### 3. 偏向锁、轻量级锁、重量级锁
+
 JVM对synchronized的优化，根据竞争情况自动升级：
 
 ```mermaid
@@ -325,12 +329,14 @@ flowchart TD
 ### 4. 死锁及避免
 
 **死锁条件**：
+
 1. 互斥条件：资源不能被共享
 2. 请求与保持条件：线程持有一个资源并请求另一个
 3. 不可剥夺条件：资源只能被持有者释放
 4. 循环等待条件：线程间形成循环等待链
 
 **避免死锁**：
+
 1. 破坏循环等待条件：按固定顺序获取锁
 2. 破坏请求与保持条件：一次获取所有资源
 3. 使用定时锁：tryLock(timeout)
@@ -369,4 +375,3 @@ public void method2() {
 
 1. [Java官方文档 - Thread类](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html)
 2. [Java官方文档 - ReentrantLock类](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/ReentrantLock.html)
-
