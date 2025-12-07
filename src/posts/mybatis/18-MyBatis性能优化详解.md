@@ -361,8 +361,8 @@ try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 **解决方案**：
 
 - 避免过度使用动态SQL
-- 合理使用<if>、<choose>等标签
-- 使用<sql>和<include>标签复用SQL片段
+- 合理使用\<if\>、\<choose\>等标签
+- 使用\<sql\>和\<include\>标签复用SQL片段
 - 注意SQL注入风险，优先使用#{}而不是${}
 
 ```xml
