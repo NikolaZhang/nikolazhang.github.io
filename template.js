@@ -13,7 +13,7 @@ description:
 date: ${dateStr}
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

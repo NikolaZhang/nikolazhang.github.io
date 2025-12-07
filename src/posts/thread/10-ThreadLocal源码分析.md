@@ -8,7 +8,7 @@ tag:
 description: 详解ThreadLocal的基本概念、核心源码结构、使用案例、常见问题及解决方案 
 date: 2025-11-30 
 author: nikola 
-icon: article 
+icon: paw 
 isOriginal: true 
 sticky: false 
 timeline: true 

@@ -7,7 +7,7 @@ description: The C compiler is not able to compile a simple test program
 date: 2024-02-22
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

@@ -6,7 +6,7 @@ tag:
 category: mybatis
 description: 详细介绍MyBatis与Spring Boot的集成方式、自动配置原理、使用方法和最佳实践
 author: nikola
-icon: article
+icon: paw
 isOriginal: true
 sticky: false
 timeline: true

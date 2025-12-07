@@ -8,7 +8,7 @@ description: 详细介绍Logback日志框架的配置方法、语法和最佳实
 date: 2022-10-13
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

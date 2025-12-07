@@ -9,7 +9,7 @@ description: Windows终端美化
 date: 2023-03-02
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

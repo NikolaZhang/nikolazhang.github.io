@@ -8,7 +8,7 @@ description: 详细介绍Redis与Spring Boot的整合方法，包括自动配置
 date: 2025-12-07
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

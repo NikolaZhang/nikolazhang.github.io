@@ -10,7 +10,7 @@ description: 深入解析Semaphore原理、使用场景、源码分析及最佳�
 date: 2024-02-23
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

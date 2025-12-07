@@ -7,7 +7,7 @@ description: 使用clion进行stm开发的配置方式
 date: 2024-03-12
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

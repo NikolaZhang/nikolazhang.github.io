@@ -8,7 +8,7 @@ tag:
 category: mybatis
 description: 详细介绍MyBatis高级映射技巧，包括一对一映射、一对多映射、多对多映射、鉴别器映射等内容
 author: nikola
-icon: article
+icon: paw
 isOriginal: true
 sticky: false
 timeline: true

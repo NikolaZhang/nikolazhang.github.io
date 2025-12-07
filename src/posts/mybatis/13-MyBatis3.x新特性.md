@@ -6,7 +6,7 @@ tag:
 category: mybatis
 description: 详细介绍MyBatis 3.x版本引入的主要新功能和改进
 author: nikola
-icon: article
+icon: paw
 isOriginal: true
 sticky: false
 timeline: true

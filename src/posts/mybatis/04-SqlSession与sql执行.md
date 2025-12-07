@@ -8,7 +8,7 @@ description: 关于mybatis parameterHandler的解析
 date: 2021-05-29
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

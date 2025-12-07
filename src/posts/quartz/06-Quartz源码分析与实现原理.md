@@ -9,7 +9,7 @@ description: 深入分析Quartz的核心源码，包括Scheduler实现、Job执�
 date: 2023-01-17
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

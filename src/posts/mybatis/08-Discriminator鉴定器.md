@@ -8,7 +8,7 @@ tag:
 description: Discriminator鉴定器
 date: 2024-12-30
 
-icon: article
+icon: paw
 
 isOriginal: true
 ---

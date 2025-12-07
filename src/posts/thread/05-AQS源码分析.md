@@ -9,7 +9,7 @@ description: 深入解析Java AQS(AbstractQueuedSynchronizer)源码，包括核�
 date: 2025-11-25
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

@@ -1,7 +1,7 @@
 ---
 title: mybatis结果集处理
 description: mybatis结果集处理
-icon: article
+icon: paw
 isOriginal: true
 date: 2024-12-29
 

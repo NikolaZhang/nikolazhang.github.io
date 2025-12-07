@@ -9,7 +9,7 @@ description: 详细介绍Redis分布式锁的实现原理、原生实现方式�
 date: 2025-12-07
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

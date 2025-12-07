@@ -11,7 +11,7 @@ description: 深入分析Redis的整体架构、核心模块、工作原理以�
 date: 2025-05-18
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

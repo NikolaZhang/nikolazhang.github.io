@@ -6,7 +6,7 @@ tag:
 category: mybatis
 description: 详细介绍MyBatis与Spring框架的集成方式、核心组件和最佳实践
 author: nikola
-icon: article
+icon: paw
 isOriginal: true
 sticky: false
 timeline: true

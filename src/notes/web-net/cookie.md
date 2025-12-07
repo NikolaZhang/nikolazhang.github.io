@@ -11,7 +11,7 @@ category: 网络
 banner: http://image.nikolazhang.top/wallhaven-nrwq11.jpg
 
 author: nikola
-icon: note
+icon: paw
 
 isOriginal: false
 sticky: false

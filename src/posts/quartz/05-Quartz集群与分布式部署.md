@@ -10,7 +10,7 @@ description: 详细介绍Quartz集群的工作原理、配置方法、任务执�
 date: 2023-01-16
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

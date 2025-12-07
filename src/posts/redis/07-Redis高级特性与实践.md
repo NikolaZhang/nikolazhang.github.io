@@ -10,7 +10,7 @@ description: 详细介绍Redis的高级特性，包括布隆过滤器、限流�
 date: 2025-12-07
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

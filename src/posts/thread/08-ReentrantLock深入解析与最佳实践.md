@@ -10,7 +10,7 @@ description: 深入解析ReentrantLock原理、使用场景、源码分析及最
 date: 2025-12-04
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: true
 sticky: false

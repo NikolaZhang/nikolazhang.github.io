@@ -9,7 +9,7 @@ description: 详细介绍Redis的核心概念、常用数据结构及其应用�
 date: 2025-05-12
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

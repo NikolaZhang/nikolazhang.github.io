@@ -6,7 +6,7 @@ category: idea
 description:
 date: 2025-12-07
 author: nikola
-icon: note
+icon: paw
 
 isOriginal: false
 sticky: false

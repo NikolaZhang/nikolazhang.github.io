@@ -6,10 +6,11 @@ export const zhNavbar = navbar([
     {
         link: "/posts/",
         text: "文章",
+        icon: "newspaper",
     },
     {
         text: "笔记",
-        icon: "page",
+        icon: "pen",
         prefix: "/notes/",
         children: [
             {
@@ -20,7 +21,7 @@ export const zhNavbar = navbar([
     },
     {
         text: "开源项目",
-        icon: "ability",
+        icon: "tree",
         prefix: "/open_source/",
         children: [
             {
@@ -72,7 +73,7 @@ export const zhNavbar = navbar([
     },
     {
         text: "网站",
-        icon: "network",
+        icon: "earth-americas",
         children: [
             {
                 text: "nga",

@@ -9,7 +9,7 @@ description: 系统总结Redis常见问题的症状、根因分析和解决方�
 date: 2025-12-07
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

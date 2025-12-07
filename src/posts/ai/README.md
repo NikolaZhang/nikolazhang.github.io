@@ -1,7 +1,7 @@
 ---
 title: ai
 index: true
-icon: note
+icon: paw
 category:
   - guide
 date: 2024-11-11

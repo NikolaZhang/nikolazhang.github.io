@@ -9,7 +9,7 @@ description: 深入探讨Quartz的核心概念、架构设计、工作原理，�
 date: 2023-01-12
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

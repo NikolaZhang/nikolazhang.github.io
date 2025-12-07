@@ -11,7 +11,7 @@ description: 详细介绍Redis主从复制和哨兵模式的原理、配置、�
 date: 2025-01-20
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

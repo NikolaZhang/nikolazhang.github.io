@@ -11,7 +11,7 @@ description: 详细介绍Redis的RDB和AOF持久化机制、原理、配置及�
 date: 2024-01-19
 
 author: nikola
-icon: article
+icon: paw
 
 isOriginal: false
 sticky: false

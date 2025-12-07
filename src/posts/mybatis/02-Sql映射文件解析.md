@@ -8,7 +8,7 @@ description: 关于mybatis Sql映射文件解析
 date: 2021-04-10
 
 author: nikola
-icon: notebook
+icon: pawbook
 
 isOriginal: true
 sticky: false
