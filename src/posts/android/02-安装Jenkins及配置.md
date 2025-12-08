@@ -4,13 +4,13 @@ tag:
   - 安卓
   - termux
   - Jenkins
-category: 安卓服务器
+category: android
 description: 安卓手机上安装Jenkins及项目构建
 banner: http://image.nikolazhang.top/wallhaven-nrwq11.jpg
 date: 2024-01-09
 
 author: nikola
-icon: paw
+icon: android
 
 isOriginal: true
 sticky: false

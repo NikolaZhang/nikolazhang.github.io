@@ -4,21 +4,21 @@ export const zhSidebar = sidebar({
     "/": [
         {
             text: "文章",
-            icon: "article",
+            icon: "file-code",
             prefix: "posts/",
             children: "structure",
             collapsible: true,
         },
         {
             text: "笔记",
-            icon: "footnote",
+            icon: "pen",
             prefix: "notes/",
             children: "structure",
             collapsible: true,
         },
         {
             text: "开源项目",
-            icon: "ability",
+            icon: "rss",
             prefix: "open_source/",
             children: "structure",
             collapsible: true,

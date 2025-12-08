@@ -1,9 +1,9 @@
 ---
 title: 工具
 index: true
-icon: tool
+icon: tools
 category:
-  - guide
+  - tools
 date: 2023-01-12
 ---
 

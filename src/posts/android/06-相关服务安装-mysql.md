@@ -4,13 +4,13 @@ tag:
   - 安卓
   - termux
   - mysql
-category: 安卓服务器
+category: android
 description: 安卓手机上使用termux
 banner: http://image.nikolazhang.top/wallhaven-nrwq11.jpg
 date: 2024-01-16
 
 author: nikola
-icon: mysql
+icon: android
 
 isOriginal: true
 sticky: false

@@ -5,13 +5,13 @@ tag:
   - termux
   - Jenkins
   - webhook
-category: 安卓服务器
+category: android
 description: 使用gitee触发webhook需要外网地址，我们只有内网环境，那么本地如何触发构建呢？
 banner: http://image.nikolazhang.top/wallhaven-nrwq11.jpg
 date: 2024-01-12
 
 author: nikola
-icon: paw
+icon: android
 
 isOriginal: true
 sticky: false

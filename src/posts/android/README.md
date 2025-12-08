@@ -3,7 +3,7 @@ title: android
 index: true
 icon: android
 category:
-  - guide
+  - android
 date: 2023-01-12
 ---
 

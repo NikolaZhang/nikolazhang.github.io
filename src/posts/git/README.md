@@ -1,9 +1,9 @@
 ---
 title: git命令 
 index: true
-icon: git
+icon: git-alt
 category:
-  - guide
+  - git
 date: 2023-01-12
 ---
 
