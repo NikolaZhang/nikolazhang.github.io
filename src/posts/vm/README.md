@@ -1,7 +1,7 @@
 ---
 title: 虚拟机
 index: true
-icon: layout
+icon: box-open
 category:
   - guide
 date: 2023-01-12

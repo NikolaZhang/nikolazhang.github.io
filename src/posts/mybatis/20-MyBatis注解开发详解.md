@@ -1,7 +1,7 @@
 ---
 title: MyBatis注解开发详解
 index: true
-icon: mybatisplus
+icon: code
 category:
   - guide
 date: 2023-01-12

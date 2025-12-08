@@ -1,9 +1,9 @@
 ---
 title: stm32
 index: true
-icon: android
+icon: microchip
 category:
-  - guide
+  - stm32
 date: 2023-02-22
 ---
 

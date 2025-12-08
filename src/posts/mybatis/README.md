@@ -1,7 +1,7 @@
 ---
 title: mybatis
 index: true
-icon: mybatisplus
+icon: database
 category:
   - guide
 date: 2023-01-12

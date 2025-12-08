@@ -1,7 +1,7 @@
 ---
 title: MyBatis代码生成器(MyBatis Generator)详解
 index: true
-icon: mybatisplus
+icon: code
 category:
   - guide
 date: 2023-01-12

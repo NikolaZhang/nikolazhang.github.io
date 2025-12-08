@@ -1,7 +1,7 @@
 ---
 title: linux
 index: true
-icon: linux
+icon: carrot
 category:
   - guide
 date: 2023-01-12

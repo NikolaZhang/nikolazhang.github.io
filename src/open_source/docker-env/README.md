@@ -1,7 +1,7 @@
 ---
 title: 容器配置
 index: true
-icon: view
+icon: network-wired
 category:
   - guide
 date: 2023-01-12

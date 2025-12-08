@@ -1,7 +1,7 @@
 ---
 title: 线程
 index: true
-icon: storage
+icon: hexagon-nodes-bolt
 category:
   - guide
 date: 2023-01-12

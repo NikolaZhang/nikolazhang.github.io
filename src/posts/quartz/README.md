@@ -1,7 +1,7 @@
 ---
 title: Quartz
 index: true
-icon: clock-circle
+icon: clock
 category:
   - quartz
 date: 2025-05-12

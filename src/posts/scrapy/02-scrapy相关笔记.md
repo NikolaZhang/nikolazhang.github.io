@@ -9,7 +9,7 @@ banner: http://image.nikolazhang.top/wallhaven-nrwq11.jpg
 date: 2024-01-23
 
 author: nikola
-icon: paw
+icon: bug
 
 isOriginal: false
 sticky: false

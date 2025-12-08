@@ -1,7 +1,7 @@
 ---
 title: git命令 
 index: true
-icon: git-alt
+icon: code-branch
 category:
   - git
 date: 2023-01-12

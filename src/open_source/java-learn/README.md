@@ -1,7 +1,7 @@
 ---
 title: java学习
 index: true
-icon: java
+icon: globe
 category:
   - guide
 date: 2023-01-12

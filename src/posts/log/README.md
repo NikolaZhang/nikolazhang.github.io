@@ -1,7 +1,7 @@
 ---
 title: logback
 index: true
-icon: editor
+icon: book
 category:
   - guide
 date: 2023-01-12

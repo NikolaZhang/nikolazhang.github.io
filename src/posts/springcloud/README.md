@@ -1,9 +1,9 @@
 ---
 title: springcloud
 index: true
-icon: module
+icon: cloud
 category:
-  - guide
+  - springcloud
 date: 2023-01-12
 ---
 

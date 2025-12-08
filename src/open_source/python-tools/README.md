@@ -1,7 +1,7 @@
 ---
 title: python工具
 index: true
-icon: python
+icon: scroll
 category:
   - guide
 date: 2023-01-12

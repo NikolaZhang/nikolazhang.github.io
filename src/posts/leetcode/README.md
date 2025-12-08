@@ -1,7 +1,7 @@
 ---
 title: leetcode问题分析
 index: true
-icon: exercise
+icon: cube
 category:
   - guide
 date: 2023-01-12

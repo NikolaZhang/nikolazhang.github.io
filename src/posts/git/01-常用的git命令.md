@@ -2,7 +2,7 @@
 isOriginal: true
 title: 常用的git命令
 date: 2018-11-25
-icon: github
+icon: code-branch
 tag:
   - git
   - 原理

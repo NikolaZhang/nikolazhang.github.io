@@ -1,7 +1,7 @@
 ---
 title: 我的vscode插件
 index: true
-icon: vscode
+icon: certificate
 category:
   - guide
 date: 2023-01-12

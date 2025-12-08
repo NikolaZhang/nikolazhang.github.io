@@ -8,7 +8,7 @@ tag:
 category: linux
 description: 在Linux中使用top命令
 date: 2021-05-28
-icon: linux
+icon: carrot
 
 sticky: false
 timeline: true
@@ -33,7 +33,7 @@ top [选项]
 
 ## top命令输出及含义
 
-```
+```plaintext
 top - 14:18:24 up 32 days, 18:52,  1 user,  load average: 0.05, 0.08, 0.08
 Tasks:  96 total,   2 running,  94 sleeping,   0 stopped,   0 zombie
 %Cpu(s):  2.4 us,  1.4 sy,  0.0 ni, 94.9 id,  1.4 wa,  0.0 hi,  0.0 si,  0.0 st

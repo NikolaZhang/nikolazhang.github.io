@@ -1,7 +1,7 @@
 ---
 title: jenkins使用 
 index: true
-icon: overflow
+icon: cog
 category:
   - guide
 date: 2023-01-12

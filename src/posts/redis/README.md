@@ -1,7 +1,7 @@
 ---
 title: Redis
 index: true
-icon: Redis
+icon: wifi
 category:
   - redis
 date: 2025-05-12

@@ -1,7 +1,7 @@
 ---
 title: android
 index: true
-icon: android
+icon: mobile
 category:
   - android
 date: 2023-01-12

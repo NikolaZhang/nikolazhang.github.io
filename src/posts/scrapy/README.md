@@ -1,7 +1,7 @@
 ---
 title: 爬虫框架
 index: true
-icon: debug
+icon: bug
 category:
   - guide
 date: 2023-01-12

@@ -1,9 +1,9 @@
 ---
 title: springboot
 index: true
-icon: customize
+icon: disease
 category:
-  - guide
+  - springboot
 date: 2023-01-12
 ---
 
@@ -18,3 +18,4 @@ date: 2023-01-12
 - [如何优雅的使用枚举](09-如何优雅的使用枚举.md)
 - [如何优雅的使用枚举2](10-如何优雅的使用枚举2.md)
 - [自定义校验类实现与应用](11-自定义校验类实现与应用.md)
+- [Spring Boot Bean生命周期详解](12-SpringBootBean生命周期详解.md)
