@@ -15,3 +15,4 @@ date: 2025-05-12
 - [Redis分布式锁与Redisson](06-Redis分布式锁与Redisson.md)
 - [Redis高级特性与实践](07-Redis高级特性与实践.md)
 - [Redis常见问题与解决方案](08-Redis常见问题与解决方案.md)
+- [Redis架构详解](09-Redis架构详解.md)

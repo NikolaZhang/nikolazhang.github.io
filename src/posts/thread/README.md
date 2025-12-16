@@ -33,3 +33,4 @@ date: 2023-01-12
 - [并发工具类的组合使用技巧](22-并发工具类的组合使用技巧.md)
 - [线程安全深入解析与最佳实践](23-线程安全深入解析与最佳实践.md)
 - [Java并发编程之synchronized锁升级机制深入解析](24-synchronized锁升级机制.md)
+- [TransmittableThreadLocal和InheritableThreadLocal详解](25-TransmittableThreadLocal和InheritableThreadLocal详解.md)
