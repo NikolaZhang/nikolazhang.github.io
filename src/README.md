@@ -11,7 +11,7 @@ bgImageDark: http://dewy-blog.nikolazh.eu.org/wallhaven-zxg9lw.png
 head:
   - - meta
     - name: algolia-site-verification
-      content: F9A01040E02C3F54
+      content: 247813647415EC0A
 projects:
   - icon: code
     name: be-kami

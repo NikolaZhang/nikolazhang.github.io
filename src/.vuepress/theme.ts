@@ -67,8 +67,9 @@ export default hopeTheme({
         docsearch: {
             appId: 'DT4A7MCZUJ',
             apiKey: '76028292f26cbfa2c3f547d465359542',
-            indexName: 'nikolazhang_github_io_dt4a7mczuj_articles'
+            indexName: 'nikolazhang_github_io_dt4a7mczuj_pages',
         },
+        // search: true,
         // If you don't need comment feature, you can remove following option
         // The following config is for demo ONLY, if you need comment feature, please generate and use your own config, see comment plugin documentation for details.
         // To avoid disturbing the theme developer and consuming his resources, please DO NOT use the following config directly in your production environment!!!!!
