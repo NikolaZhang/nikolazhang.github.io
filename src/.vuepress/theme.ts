@@ -65,14 +65,11 @@ export default hopeTheme({
             assets: "fontawesome",
         },
         docsearch: {
-            appId: 'DT4A7MCZUJ',
-            apiKey: '76028292f26cbfa2c3f547d465359542',
-            indexName: 'nikolazhang_github_io_dt4a7mczuj_pages',
+            appId: 'LPNQHO03XM',
+            apiKey: '69aec575fa0d1e47d7b3b5a07ba2517b',
+            indexName: 'blog_nikolazh_eu_org_lpnqho03xm_articles',
         },
         // search: true,
-        // If you don't need comment feature, you can remove following option
-        // The following config is for demo ONLY, if you need comment feature, please generate and use your own config, see comment plugin documentation for details.
-        // To avoid disturbing the theme developer and consuming his resources, please DO NOT use the following config directly in your production environment!!!!!
         comment: {
             provider: "Waline",
             serverURL: "https://vercel-blog-comment.nikolazh.eu.org/",
@@ -84,5 +81,6 @@ export default hopeTheme({
                 '//unpkg.com/@waline/emojis@1.1.0/tieba',
             ],
         },
+        sitemap: true,
     },
 });
