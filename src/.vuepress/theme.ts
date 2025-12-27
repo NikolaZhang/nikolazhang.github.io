@@ -72,7 +72,7 @@ export default hopeTheme({
                     name: 'blog_nikolazh_eu_org_lpnqho03xm_articles',
                     searchParameters: {
                         hitsPerPage: 20,
-                        facetFilters: [],
+                        facetFilters: ["lang:"],
                     }
                 }
             ]
