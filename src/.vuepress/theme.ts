@@ -69,7 +69,7 @@ export default hopeTheme({
             apiKey: '69aec575fa0d1e47d7b3b5a07ba2517b',
             indexName: 'blog_nikolazh_eu_org_lpnqho03xm_articles',
             searchParameters: {
-                facetFilters: ["*"],
+                filters: "facetFilters: ['*']",
             },
         },
         // search: true,
